@@ -44,3 +44,12 @@ When we need to discard a file, we remove the one that is least frequently used.
 ## References
 - [Designing Data-Intensive Application](https://www.amazon.com/Designing-Data-Intensive-Applications-Reliable-Maintainable/dp/1449373321).
 - [Caching in theory and practice](https://docs.google.com/document/d/1WhtjVDqdVONBVjD2TdZmUBXg37iE1TK-D1_lsmXZXVs/edit#)
+
+https://docs.google.com/document/d/1WhtjVDqdVONBVjD2TdZmUBXg37iE1TK-D1_lsmXZXVs/edit#heading=h.x61xfd9oscc8
+
+https://aws.amazon.com/caching/best-practices/
+
+https://calpaterson.com/ttl-hell.html
+
+https://www.ehcache.org/documentation/3.3/caching-patterns.html#cache-aside
+
