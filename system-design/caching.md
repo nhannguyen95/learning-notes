@@ -1,14 +1,22 @@
-TABLE OF CONTENS:
+## Table of Contents
 - [Caching Flavors](#caching-flavors)
 - [Application Caching](#application-caching)
-  * [Cache Patterns](#cache-patterns)
-    + [Cache-aside](#cache-aside)
-    + [Cache-as-SoR](#cache-as-sor)
-  * [Eviction Algorithms](#eviction-algorithms)
-    + [Most Recently Used](#most-recently-used)
-    + [Least Recently Used](#least-recently-used)
-    + [Least Frequently Used](#least-frequently-used)
-  * [Invalidation](#invalidation)
+  - [Eviction Algorithms](#eviction-algorithms)
+    - [Most Recently Used (MRU)](#most-recently-used-mru)
+    - [Least Recently Used (LRU)](#least-recently-used-lru)
+    - [Least Frequently Used (LFU)](#least-frequently-used-lfu)
+  - [Invalidation](#invalidation)
+  - [Cache Patterns](#cache-patterns)
+    - [Cache-aside](#cache-aside)
+    - [Read-through/Write-through Cache (Cache-as-SoR)](#read-throughwrite-through-cache-cache-as-sor)
+  - [Read/Write Strategies](#readwrite-strategies)
+    - [Read strategy: lazy-loading](#read-strategy-lazy-loading)
+    - [Write strategy: write-through.](#write-strategy-write-through)
+    - [Write strategy: write-behind](#write-strategy-write-behind)
+    - [Write strategy: invalidate-on-write](#write-strategy-invalidate-on-write)
+  - [Cache Problems](#cache-problems)
+    - [Cache Stampede](#cache-stampede)
+  - [Best practices](#best-practices)
 - [Web Caching](#web-caching)
 - [References](#references)
 
@@ -35,14 +43,9 @@ Common cache use cases:
 
 The cache appears to application service as a single store, and objects are allocated to individual cache servers using a hash function on the object key.
 
-Best practices on cache design:
-- Monitor production cache usage to make sure hit and miss rate are in line with expectation.
-- For each combination of read/write strategy pair, assess where reads and writes go to (cache or db).
-- There must not be any consequences on a cache miss.
-
 ### Eviction Algorithms
 
-Eviction policies are needed to prevent caches from using up all available memory.
+Eviction policies are needed to prevent caches from using up all available memory. A good strategy in selecting an appropriate eviction policy is to consider the data stored in your cluster and the outcome of keys being evicted.
 
 #### Most Recently Used (MRU)
 
@@ -68,7 +71,15 @@ Data in cache are removed/evicted by evicted algorithms, but should also be remo
 - Data can become stale if the underlying data stored in the db is updated by another process without the cache's awareness.
 - If cache store result of some calculation, the result can become stale if the calculation's input change.
 
-If the data in cache can become stale, a good strategy is assigning a Time To Live (TTL) to the data to specify "how long to cache this data". **Most caches often don't consider the TTL when looking for data to evict, this means data can be evicted before it has expired**.
+If the data in cache can become stale, a good strategy is assigning a Time To Live (TTL) to the data to specify "how long to cache this data".
+
+**Most caches often don't consider the TTL when looking for data to evict, this means data can be evicted before it has expired**. Some caches such as Amazon ElastiCache however support eviction policies that take TTL into consideration:
+- allkeys-lfu/lru: evicts keys regardless of TTL set.
+- allkeys-random: evicts random keys reglardless of TTL set.
+- volatile-lfu/lru: evicts keys from those that have a TTL set.
+- volatile-ttl: evicts keys with shortest TTL set.
+- volatile-random: evicts random keys with a TTL set.
+- no-eviction: do not evict keys, writes to cache are blocked until memory frees up.
 
 ### Cache Patterns
 
@@ -107,11 +118,12 @@ Advantages:
 Disadvantages:
 - Additional roundtrips to cache and db on cache misses/expires.
 
-### Write strategy: write-through.
+#### Write strategy: write-through
 
 When data is written, both db and cache get updated. 
 
 Notes:
+- Is a good combination with lazy-loading: lazy-loading caches cache misses on reads, write-through populates data on writes, so the two complement each other.
 - This strategy is suitable for use cases where the data get udpated and accessed frequently.
 - Under this strategy, reads will predonimately come to cache and writes go to db, this is good because many databases can do writes faster when writers aren't contending with readers for locks.
 
@@ -121,7 +133,7 @@ Advantages:
 Disadvantages:
 - Infrequently-read data might also get stored in the cache.
 
-### Write strategy: write-behind
+#### Write strategy: write-behind
 
 Same with write-through, but the update to db happens asynchronously. This is also known as a write-back cache, and internally is the strategy used by most db engines.
 
@@ -131,7 +143,7 @@ Advantages:
 Disadvantages:
 - Possible lost updates if the cache server crashes before a db update is completed.
 
-### Write strategy: invalidate-on-write
+#### Write strategy: invalidate-on-write
 
 When data is written, update the db but invalidate the (data in) cache.
 
@@ -139,21 +151,40 @@ Notes:
 - This strategy is useful when invalidating out-speed updating the (data in) cache.
 - Thus, this stragety is common if data in cache is linked (a write to 1 single data can affect multiple cache entries) or aggregated data.
 
+### Cache Problems
+
+#### Cache Stampede
+
+Cache Stampede is a varant of thundering herd effect that happens when many different application processes simultaneously request a cache key, get a cache miss/expire, and then each hits the same database query in parallel.
+
+Some solutions:
+- Blocking all threads that are simultaneously requesting a particular value and let only one thread through to the db. Once that thread has populated the cache, the other threads will be allowed to read the cached value.
+- [Read more](https://distributed-computing-musings.com/2021/12/thundering-herd-cache-stampede/).
+
+### Best practices
+
+Cache usage:
+- Cache almost everything.
+- Use lazy-loading strategy when you can, apply where you have data that is read often, but written infrequently.
+- Always apply a TTL to all of your cache keys, except those you are updating by write-through caching. This helps cache application bugs where you forget to update/delete a given cache key when updating the underlying record because eventually, the cache key will auto-expire and get refreshed.
+- For rapid changing data (such as leaderboards), it makes more sense to set a short TTL (of a few seconds) rather than adding write-through caching or complex expiration logic.
+- [Russian doll caching](https://signalvnoise.com/posts/3690-the-performance-impact-of-russian-doll-caching).
+
+Cache design:
+- Monitor production cache usage to make sure hit and miss rate are in line with expectation.
+- For each combination of read/write strategy pair, assess where reads and writes go to (cache or db).
+- There must not be any consequences on a cache miss.
+
 ## Web Caching
+
+"HTTP has a caching system built-in but it's a TTL-only system"
 
 ---
 
 ## References
-- [Designing Data-Intensive Application](https://www.amazon.com/Designing-Data-Intensive-Applications-Reliable-Maintainable/dp/1449373321).
 
-https://docs.google.com/document/d/1WhtjVDqdVONBVjD2TdZmUBXg37iE1TK-D1_lsmXZXVs/edit#heading=h.x61xfd9oscc8
-
-https://aws.amazon.com/caching/best-practices/
-
-https://calpaterson.com/ttl-hell.html
-
-https://www.ehcache.org/documentation/3.3/caching-patterns.html#cache-aside
-
-https://docs.aws.amazon.com/whitepapers/latest/database-caching-strategies-using-redis/caching-patterns.html
-
-https://www.alachisoft.com/resources/articles/readthru-writethru-writebehind.html
+- [Foundations of Scalable Systems [Book]](https://www.oreilly.com/library/view/foundations-of-scalable/9781098106058/)
+- [Caching Best Practices](https://aws.amazon.com/caching/best-practices/)
+- [Caching patterns](https://docs.aws.amazon.com/whitepapers/latest/database-caching-strategies-using-redis/caching-patterns.html)
+- [Staying out of TTL hell](https://calpaterson.com/ttl-hell.html)
+- [Using Read-through & Write-through in Distributed Cache](https://www.alachisoft.com/resources/articles/readthru-writethru-writebehind.html)
