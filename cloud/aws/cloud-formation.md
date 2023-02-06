@@ -242,4 +242,8 @@ Resources:
                         /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource EC2Instance --region ${AWS::Region}
 ```
 
+### Nested Stacks
 
+### Stack Sets
+
+### Creation, Update, Deletion Policies
