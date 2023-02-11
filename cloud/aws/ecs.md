@@ -1,3 +1,42 @@
+## Table of contents
+
+- [Introduction](#introduction)
+- [Concepts](#concepts)
+  - [Task Definition](#task-definition)
+  - [Task](#task)
+  - [Service](#service)
+    - [Deployment Type](#deployment-type)
+      - [Rolling update](#rolling-update)
+  - [Container instance](#container-instance)
+    - [Container agent](#container-agent)
+  - [Cluster](#cluster)
+  - [Launch Type](#launch-type)
+  - [Capacity Provider](#capacity-provider)
+- [Running ECS on Fargate](#running-ecs-on-fargate)
+  - [Workloads](#workloads)
+  - [Tasks](#tasks)
+  - [Task networking](#task-networking)
+  - [Task CPU and memory](#task-cpu-and-memory)
+  - [Task storage](#task-storage)
+  - [Logging](#logging)
+  - [Service load balancing](#service-load-balancing)
+  - [Task placement](#task-placement)
+- [Running ECS on EC2](#running-ecs-on-ec2)
+  - [Task Networking](#task-networking)
+  - [Task Placement](#task-placement)
+- [Development Topics](#development-topics)
+  - [Using data volumes in tasks](#using-data-volumes-in-tasks)
+  - [Scheduling ECS tasks](#scheduling-ecs-tasks)
+  - [Service load balancing](#service-load-balancing)
+  - [Service auto scaling](#service-auto-scaling)
+  - [Task scale-in protection](#task-scale-in-protection)
+  - [Service throttle logic](#service-throttle-logic)
+  - [Tagging ECS resources](#tagging-ecs-resources)
+  - [Events and EventBridge](#events-and-eventbridge)
+- [References](#references)
+
+---
+
 ## Introduction
 
 ECS is a managed container orchestration service that helps us run and scale containerized applications. It is a regional service that simplifies the management involved with running containers in a highly available manner across multiple AZs.
@@ -11,7 +50,9 @@ ECS can be used along with the following AWS services:
 - ECR.
 - CloudFormation: you can define clusters, task definitions, and services as entities in an AWS CloudFormation script.
 
-## Task Definition
+## Concepts
+
+### Task Definition
 
 A task definition is a text file in JSON format that describes 1 or up to 10 containers from your application.
 
@@ -45,7 +86,7 @@ See [here](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/example_t
 
 After you create a task definition, you can run it as a task or a service.
 
-## Task
+### Task
 
 A task is the instantiation of a task definition within a cluster. You can specify the number of tasks to run on your cluster after creating a task definition for your application.
 
@@ -68,7 +109,7 @@ Task lifecycle flow:
 - STOPPED: the task has been successfully stopped.
 - DELETED: a transition state when a task stops, this is not displayed in the console.
 
-## Service
+### Service
 
 ECS service is used to run and maintain your desired number of tasks simultaneously in an Amazon ECS cluster.
 
@@ -88,7 +129,7 @@ For a definitive list of service definition parameters, see [here](https://docs.
 
 Also see [Service load balancing](#service-load-balancing-1).
 
-### Deployment Type
+#### Deployment Type
 
 An ECS deployment type determines the deployment strategy that your service uses.
 
@@ -97,7 +138,7 @@ An ECS deployment type determines the deployment strategy that your service uses
 - Blue/green.
 - External
 
-#### Rolling update
+##### Rolling update
 
 ECS service scheduler replaces currently running tasks with new tasks.
 
@@ -113,7 +154,7 @@ The rolling update deployment has 2 methods which provide a way for you to quick
 
 You can use either method or both methods together. When use both, the deployment is set to failed as soon as the failure criteria for either failure method is met.
 
-## Container instance
+### Container instance
 
 When you run tasks with ECS using the EC2 launch type or Auto Scaling group capacity provider, the tasks are deployed on your active ECS container instances.
 
@@ -121,14 +162,14 @@ An ECS container instance is an EC2 instance that is running the ECS container a
 
 Tasks using the Fargate launch type are instead deployed onto infrastructure managed by AWS. So you might not have to interact directly with the concepts of container instance and container, but they're still there (?).
 
-### Container agent
+#### Container agent
 
 The container agent runs on each container instance within ECS cluster.
 - It is able to register the container instance into one of your clusters.
 - It sends information about the current running tasks and resource utilization of your containers to ECS.
 - It starts/stops tasks whenever it receives a request from ECS.
 
-## Cluster
+### Cluster
 
 ECS cluster is a logical group of tasks, services, and that allows for shared capacity and common configurations. Your tasks and services are run on infrastructure that is registered to a cluster. The infrastructure can be provided by Fargate, EC2 instances or on-premise server. 
 
@@ -141,7 +182,7 @@ Possible states of a cluster:
 - FAILED: cluster has providers associated with it and the resources needed for the capacity provider have failed to create.
 - INACTIVE: cluster has been deleted. INACTIVE clusters may remain discoverable in your account for a period of time.
 
-## Launch Type
+### Launch Type
 
 Specifying a launch type when running a standalone task or create a service determines the infrastructure that the task or service is hosted on.
 
@@ -152,7 +193,7 @@ Available launch type:
 
 Launch type is one of the key differentiators for how you architecture your app on ECS. AWS guidance is in [Running ECS on Fargate](#running-ecs-on-fargate) and [Running ECS on EC2](#running-ecs-on-ec2).
 
-## Capacity Provider
+### Capacity Provider
 
 Launch type is a generic way to determine where your tasks get deployed (Fargate or EC2), and the choice is binary.
 
