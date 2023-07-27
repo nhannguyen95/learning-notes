@@ -1,5 +1,3 @@
-#java #modern-java-in-action-2018 
-
 ---
 
 mindmap-plugin: basic
@@ -126,3 +124,9 @@ mindmap-plugin: basic
 
 ## References
 - Modern Java in Action (2018)
+
+## Tags
+
+- #java
+- #stream
+- #modern-java-in-action-2018 

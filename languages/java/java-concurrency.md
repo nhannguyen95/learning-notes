@@ -31,3 +31,6 @@ mindmap-plugin: basic
       - #starvation
       - #livelock
 - Performance hazards
+   - Performance = good thing happens quickly
+   - Examples
+      - #context-switch
