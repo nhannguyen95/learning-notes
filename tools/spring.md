@@ -39,7 +39,9 @@ mindmap-plugin: basic
 - Spring AOP
    - AOP = #aspect-oriented-programming
       - Aspect = the way a framework intercepts method calls
-      - E.g.: Adding pre/post processing logic to a method when it is called
+         - Adding pre/post processing logic
+         - Intercept method parameters
+         - Intercept return value
       - Pros: logic decoupling
       - Terms
          - *aspect*: what code to execute when a method is called
@@ -50,6 +52,10 @@ mindmap-plugin: basic
       - Approach used by Spring to support AOP
       - Target object must be a bean in the Spring context
       - Returned object is a proxy/decorated object by Spring instead of the original one
+   - Aspects execution chain
+      - A method can be intercepted by many aspects
+      - Spring does not guarantee execution order by default
+      - Can use `@Order` annotation to specify execution order
 
 ## Hands-on
 - Adding beans to Spring context
@@ -127,8 +133,8 @@ mindmap-plugin: basic
       - Recommended
 
 ## References
-- Spring in Action, 6ed
-- Spring Start Here
+- #book-spring-in-action-6ed
+- #book-spring-start-here
 
 ## Ecosystem
 - Spring Core
@@ -139,7 +145,3 @@ mindmap-plugin: basic
 - Spring Cloud
 - Spring Batch
 - Spring Boot
-
-## Tags
-- #spring
-- #book-spring-start-here
