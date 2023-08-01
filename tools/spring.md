@@ -139,9 +139,21 @@ mindmap-plugin: basic
 ## Ecosystem
 - Spring Core
    - Spring Data Access
-- Spring MVC
+- [[spring-boot]]
+   - Purpose: create prod-ready Spring app with minimal configurations
+   - Features
+      - Simplified project creation
+      - Simplified dependency management
+         - Grouping dependencies per capability (web, db, security, etc.)
+         - As a result, we just specify the capability-oriented group of dependencies we want to use
+      - Autoconfiguration
 - Spring Data
 - Spring Security
 - Spring Cloud
 - Spring Batch
-- Spring Boot
+- Spring MVC
+   - Components
+      - Dispatcher servlet
+      - Handler mapping
+      - Controller
+      - View resolver
