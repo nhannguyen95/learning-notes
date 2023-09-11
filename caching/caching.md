@@ -11,7 +11,7 @@
     - [Read-through/Write-through Cache (Cache-as-SoR)](#read-throughwrite-through-cache-cache-as-sor)
   - [Read/Write Strategies](#readwrite-strategies)
     - [Read strategy: lazy-loading](#read-strategy-lazy-loading)
-    - [Write strategy: write-through.](#write-strategy-write-through)
+    - [Write strategy: write-through](#write-strategy-write-through)
     - [Write strategy: write-behind](#write-strategy-write-behind)
     - [Write strategy: invalidate-on-write](#write-strategy-invalidate-on-write)
   - [Cache Problems](#cache-problems)
