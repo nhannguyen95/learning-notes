@@ -138,3 +138,81 @@ setN(n + 5);
 setN(n => n + 1);
 setN(42);
 ```
+
+## State
+
+Component identity = component type (e.g. `Counter`, `h1`, etc.) + its position/structure in render tree (e.g. `root>div>div>Counter`).
+
+Same components = same identity.
+
+A component's state is tied to its identity: React preserves a component's state for as long as it's being rendered with same identity. If its identity changes (or when the component gets un-rendered, see `key` usage below), React destroys/resets its state.
+
+Consequences:
+- Same component type at same position preserves state:
+```jsx
+// Counter's state is preserved when isFancy changes since
+// Counter preserves its identity regardless of change in isFancy:
+// - Position: still first child of <div />
+// - Component type: still Counter at this position.
+function App() {
+  const [isFancy, setIsFancy] = useState(false);
+  return (
+	  <div>
+		  {isFancy ? (
+			  <Counter isFancy={true} />
+		  ) : (
+		      <Counter isFancy={false} />
+		  )}
+	  </div>
+  );
+}
+```
+- Different component types at same position reset state:
+```jsx
+// Counter's state is reset when Counter is re-rendered
+// after isFancy changes from false to true and back to false.
+// This is because the component identity changes during that change:
+// Position: first child of <div />
+// Component type: change from Counter to p.
+function App() {
+  const [isFancy, setIsFancy] = useState(false);
+  return (
+	  <div>
+		  {isFancy ? (
+			  <p> Fancy counter placeholder </p>
+		  ) : (
+		      <Counter isFancy={false} />
+		  )}
+	  </div>
+  );
+}
+```
+
+There will be cases where you want to reset state of component with same identity, you can use `key` to override the React's default way of figuring out a component identity. Within a same parent, `key` tells React that it should identify a component based on (component type + `key`), rather than (component type + position):
+```jsx
+// Switching between isFancy true/false does NOT preserve
+// the state of Counter since you gave them different keys,
+// even they have same component type and are rendered at same
+// position.
+//
+// Behavior:
+// - "counter2" is (newly created and) shown as 0, increase it to 1.
+// - switch isFancy to true.
+// - "counter2" gets un-rendered (removed from the DOM).
+// - "counter1" is (newly created and) shown as 0 (not 1, since different identity), increase it to 2.
+// - switch isFancy to false.
+// - "counter1" gets un-rendered (removed from the DOM).
+// - "counter2" is (newly created and) shown as 0 (not 1), this means its state got reset, it's because previously it was un-rendered.
+function App() {
+  const [isFancy, setIsFancy] = useState(false);
+  return (
+	  <div>
+		  {isFancy ? (
+			  <Counter key="counter1" isFancy={true} />
+		  ) : (
+		      <Counter key="counter2" isFancy={false} />
+		  )}
+	  </div>
+  );
+}
+```
