@@ -100,6 +100,7 @@ let counter = document.getElementById('counter');
 - When calling `useState`, React gives you a snapshot of the state for that render (`output`).
 - Variables and event handlers don't "survive" re-renders, every render has its own event handlers. Every render (and functions inside it) will always see the snapshot of the state that React gave to that render.
 	- This means event handlers created in the past have the state values from the render in which they where created. This explains why `alert` shows `count` instead of `count + 1` even after 5 seconds which is the time by then the `Counter` component should have already been re-rendered.
+
 ## React rendering process
 
 - Triggering a render.
@@ -216,3 +217,123 @@ function App() {
   );
 }
 ```
+
+## `useReducer`
+
+### Writing reducers
+
+- Reducers must be pure, since similar to state updater functions, they run during rendering.
+- Each action describes a single user interaction, even if that leads to multiple changes in the data.
+
+### Comparing `useState` and `useReducer`
+
+- Code size: with `useState` you don't have to write a lot of (boilerplate) code upfront.
+- Debugging: with `useReducer` it can be easier to tell where and why the state was set incorrectly by examining the state and the action that triggered the state update.
+- Testing: a reducer is a pure function and does not depend on your component. This means you can export and test it separately.
+
+## `useRef`
+
+### Managing the DOM
+
+DOM manipulation is the most common use case for refs. Sometimes you might need access to the DOM elements managed by React (e.g. to focus a node, scroll to it, or measured its size and position):
+
+```jsx
+// In your component:
+const myRef = useRef(null);
+<div ref={myRef}>
+```
+
+When React creates a DOM node for the `<div>`, it will assign a reference to this node to `myRef.current` during the commit phase.
+
+You can also pass a `ref callback` to the `ref` prop, the callback will be called with the DOM node when it is time to set the ref, and with null when it's time to clear it.
+
+```jsx
+<div ref={(node) => {
+  myRef.current = node;
+}}>
+```
+
+Since refs are an escape hatch that should be used sparingly, React by default does not let a component access the DOM nodes of other components, not even for its own children. That's why if you try to put a ref on your own component, by default you will get `null`:
+
+```jsx
+function MyInput(props) {
+  return <input {...props} />;
+} 
+
+function MyForm() {
+  const myRef = useRef(null);
+  return <MyInput ref={myRef} />;
+}
+```
+
+Instead, the component that wants to expose their DOM node(s) (`MyInput`) have to opt in to that behavior using `forwardRef`:
+```jsx
+const MyInput = forwardRef((props, ref) => {
+  return <input {...props} ref={ref} />;
+});
+```
+
+In the above code, the parent component of `MyInput` can do anything with `input` through the ref, such as changing its CSS. `useImperativeHandle` can be used to restrict the exposed functionality:
+
+```jsx
+const MyInput = forwardRef((props, ref) => {
+  const realInputRef = useRef(null);
+
+  useImperativeHandle(ref, () => ({
+    // Only expose focus and nothing else
+    focus() {
+      realInputRef.current.focus();
+    },
+  }));
+
+  return <input {...props} ref={realInputRef} />;
+});
+```
+
+React sets `ref.current` during the commit phase. Before updating the DOM, React sets the affected `ref.current` values to `null`; after updating the DOM, React immediately sets them to the corresponding DOM nodes. Usually you will access refs from event handlers. That explains why in the following code, it scrolls to the todo item that was just before the last added one:
+```jsx
+function TodoList() {
+  const [todos, setTodos] = useState([]);
+
+  function handleAdd() {
+    const newTodo = {};
+
+    // This is queued instead of immediately triggering a re-render/DOM update.
+    setTodos([ ...todos, newTodo ]);
+
+    // listRef is still pointing to old DOM list.
+    listRef.current.lastChild.scrollIntoView(/*...*/);
+  }
+}
+```
+
+To fix the issue, you can use `flushSync` from `react-dom` to force React to update the DOM synchronously right after the code wrapped in `flushSync` executes.
+
+```typescript
+flushSync(() => {
+  setTodos([ ...todos, newTodo ]);
+});
+
+// listRef is now pointing to new DOM list.
+listRef.current.lastChild.scrollIntoView(/*...*/);
+```
+
+Best practices:
+- Avoid changing DOM nodes managed by React: for example modifying, adding children to, or removing children from elements that are managed by React can lead to inconsistent visual results or crashes.
+- If you must do it, do it with caution. You can safely modify parts of the DOM that React has no reason to update.
+
+## Passing data
+
+Some ways to pass data to children components:
+- Passing props: when the component in need of the data is not distant from the data-provider component.
+- Extract components and pass JSX as `children`: when the component in need of the data is distant from the data-provider component and intermmediate components do not need the data.
+- Using context: when the data is needed by distant components in different parts of the tree.
+
+## Context
+
+Context use cases:
+- Theming.
+- Current account.
+- Routing.
+- Managing state: you can combine reducers and context together to manage state of a complex screen (create the context, then put state and dispatch into the context, finally use context anywhere in the tree).
+
