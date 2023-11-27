@@ -15,7 +15,7 @@ Pure functions:
 - Does not mutate already existing variables.
 - Given same input, produces same output.
 
-React components rendering process should be pure function: they does not change preexisting variables (props, state, context).
+React components rendering process should be pure function: they does not change preexisting variables (props, state, context, DOM nodes, etc.).
 
 Benefits of pure React components:
 - The component can run in different environments.
@@ -321,6 +321,154 @@ listRef.current.lastChild.scrollIntoView(/*...*/);
 Best practices:
 - Avoid changing DOM nodes managed by React: for example modifying, adding children to, or removing children from elements that are managed by React can lead to inconsistent visual results or crashes.
 - If you must do it, do it with caution. You can safely modify parts of the DOM that React has no reason to update.
+
+## `useEffect`
+
+### Types of React comopnents logic
+
+3 types:
+- Rendering logic: calculate JSX from props/states. Rendering logic must be pure.
+- Event handlers: side effects triggered by user actions.
+- Effects: side effects triggered by rendering (e.g. connecting to a server when the component is visible on the screen). **Effects run at end of commit phase after screen updates**.
+
+### `useEffect` behavior
+
+```typescript
+useEffect(() => {
+  // This runs after every render.
+  return () => {
+    // This runs each time before the Effect runs again,
+    // and one final time when the component unmounts (gets removed).
+  };
+});
+
+useEffect(() => {
+  // This runs only on mount (when the component appears).
+}, []);
+
+useEffect(() => {
+  // This runs on mount and also if either a or b have changed since the last render.
+}, [a, b]);
+```
+
+Note that in development mode, React intentionally remounts your components once immediately after its initial mount and whenever you save a file.
+
+### Fetching data in Effects
+
+Downsides:
+- Effects don't run on servers: The initial-rendered HTML only includes a loading state with no data. Client has to download all JavaScript and render your app just to discover that it now needs the data.
+- Network waterfalls: rendering parent compnent -> fetching parent data -> rendering child -> fetching child data. This can be significantly slower than fetching all data in parallel.
+- Can suffer from race condition, fixes requite some boilerplates:
+  ```typescript
+  useEffect(() => {
+    const fetchData = async () => {
+      const repsonse = await fetch(`${props.id}`);
+      setData(response.json());
+    };
+
+    fetchData();
+  }, [props.id]);  // if `id` changes fast enough, the component might display incorrect data.
+  ```
+
+  Fix #1: boolean flag
+
+  ```typescript
+  useEffect(() => {
+    let abort = false;
+
+    const fetchData = async () => {
+      const repsonse = await fetch(`${props.id}`);
+      if (!abort)
+        setData(response.json());
+    };
+
+    fetchData();
+
+    return () => {
+      // Aborting the result originated from previous requests,
+      // only update the component with result from last request.
+      // Problem: we abort unsued results, not unused requests,
+      // they are still in-flight.
+      abort = true;
+    };
+  }, [props.id]);
+  ```
+
+  Fix #2: associate each request with some identity for abortion.
+
+  ```typescript
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    const fetchData = async () => {
+      try {
+        const repsonse = await fetch(`${props.id}`, { signal: abortController.signal });
+        setData(response.json());
+      } catch (e) {
+        if (e.name === 'AbortError') {
+          // Aborting a fetch throws an error
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [props.id]);
+  ```
+
+Recommendations:
+- If you use a Framework, use its built-in data fetching mechanism.
+- Otherwise, using/building a client-side cache: React Query, useSWR, React Router 6.4+, etc. In case developing your own, you would use Effects under the hood but add logic for deduplication requests, caching responses, avoiding network waterfalls by preloading data or hoisting data requirements to routes.
+
+### You might not need an Effect
+- When something can be calculated from existing props/states, calculate it during rendering. If the calculation is expensive, `useMemo` can be used to cache the result.
+- When you want to reset the state when a prop changes, consider giving your component an identity by passing `key`:
+  ```typescript
+  function ProfilePage({ userId }) {
+    const [comment, setComment] = useState('');
+    
+    // Bad: comment only gets reset after component render.
+    // This means ProfilePage has a flash of stale comment
+    // data when userId changes, and takes 1 extra render
+    // (triggered by setComment) to reset comment:
+
+    // userId changes
+    // -> ProfilePage rendered with old comment
+    // -> useEffect triggered
+    // -> setComment('') called
+    // -> ProfilePage rendered with '' comment.
+    useEffect(() => {
+      setComment('');
+    }, [userId]);
+
+    return /* rendering user profile with comment */;
+  }
+  ```
+
+  Instead:
+
+  ```typescript
+  function ProfilePage({ userId }) {
+    return <Profile userId={userId} key={userId}>;
+  }
+
+  function Profile({ userId }) {
+    const [comment, setComment] = useState('');
+    // ...
+  }
+  ```
+- Reset/adjust the state (or part of it) when a props changes, but not all: consider "unstate"/restructure the state of the variables which depend on the props and directly calculate it from the props during rendering.
+
+### Reference
+
+React compares the dependency values using `Object.is` comparision.
+
+Some dependencies you can omit from the dependency array since they have a stable identity:
+- Refs: same `useRef` call returns same object on every render.
+- The set functions returned by `useState`.
 
 ## Passing data
 
