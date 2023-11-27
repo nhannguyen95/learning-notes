@@ -31,6 +31,7 @@ mindmap-plugin: basic
 				- #read-modify-write
 			- To prevent, we need #atomicity
 				- Ops A and B (can be same) are atomic with respect to each other if, from the perspective of a thread executing A, when another one executes B, either all or none of B has executed.
+				- Atomicity can be achieved by Java's `synchronized`.
 - Liveness hazards
 	- Liveness = something good eventually happens
 	- Examples
@@ -53,32 +54,48 @@ mindmap-plugin: basic
 - Stateless objects (objects created from classes that have no member variables) are always thread-safe.
 
 ## Java concurrency tools
-- Atomicity
-	- #synchronized block
+- Locking / #synchronized block
 
-		-
-		  ```java
-		  synchronized (lock) {
-		  // Block of code guarded by the lock object.
-		  }
-		  
-		  // Synchronize the whole method
-		  synchronized (lock) void func();
-		  ```
+	-
+	  ```java
+	  synchronized (lock) {
+	  // Block of code guarded by the lock object.
+	  }
+	  
+	  // Synchronize the whole method
+	  synchronized (lock) void func();
+	  ```
 
-		- #intrinsic-locks (or monitor locks)
-			- `lock` is left empty.
-			- On the synchronized block enter: the object on which the method is being invoked is acquired by the executing thread as the lock.
-			- On block exit (normal control path or exception throw): the lock is automatically released.
-			- Intrinsic locks act as #mutexes (mutual exclusion)
-				- At most one thread may own the lock.
-				- When a thread attempts to acquire a lock, it must wait until the lock is released (by another thread acquiring it).
-			- Intrinsic locks are #reentrant
-				- Locks are acquired on a per-thread (rather than per-invocation) basis.
-				- This means if a thread requests a lock it already hold, the request succeeds.
-				- Reentrancy saves us from some deadlock situations (e.g. recursion, override synced method calls to its super, also synced method, etc.)
-		- Locks usage
-			- Compound actions (check-then-act, read-modify-write) on shared state (an object's member variables, or a group of them) must be made atomic to avoid race condition.
-			- Synchronization needs to be used not only when writing to a shared (object's member) variable, but also everywhere that variable is accessed. The synchronization must be used with the same lock. We say that the variable is guarded by that lock.
-			- Every shared, mutable variable should be guarded by exactly one lock.
-			- For every invariant (object's state) that involves more than 1 variable, all that involved variables must be guarded by the same lock.
+	- #intrinsic-locks (or monitor locks)
+		- `lock` is left empty.
+		- On the synchronized block enter: the object on which the method is being invoked is acquired by the executing thread as the lock.
+		- On block exit (normal control path or exception throw): the lock is automatically released.
+		- Intrinsic locks act as #mutexes (mutual exclusion)
+			- At most one thread may own the lock.
+			- When a thread attempts to acquire a lock, it must wait until the lock is released (by another thread acquiring it).
+		- Intrinsic locks are #reentrant
+			- Locks are acquired on a per-thread (rather than per-invocation) basis.
+			- This means if a thread requests a lock it already hold, the request succeeds.
+			- Reentrancy saves us from some deadlock situations (e.g. recursion, override synced method calls to its super, also synced method, etc.)
+	- #visibility
+	- Usage
+		- Compound actions (check-then-act, read-modify-write) on shared state (an object's member variables, or a group of them) must be made atomic to avoid race condition.
+		- #memory-visibility
+			- Without synchronization, there is no guarantee that the reading thread will see a value written by another thread on a timely basis, or even at all.
+			- This is because without synchronization, compiler/processor/runtime can do some weird things to optimize the performance.
+			- Solution: synchronization needs to be used not only when writing to a shared (object's member) variable, but also everywhere that variable is accessed. The synchronization must be used with the **same lock**. We say that the variable is guarded by that lock.
+			- This way, locking ensures all threads see the most up-to-date values of shared mutual variables.
+		- Every shared, mutable variable should be guarded by exactly one lock.
+		- For every invariant (object's state) that involves more than 1 variable, all that involved variables must be guarded by the same lock.
+		- Making sure synchronized blocks are short enough to achieve a balance between simplicity (synchronizing all code paths) and concurrency performance (synchronizing shortest possible code paths since there's overhead of acquiring and releasing locks).
+		- Avoid holding locks for blocks whose computations or operations at risk of not completing quickly.
+- #volatile variables
+	- `volatile` is an alternative, weaker form of synchronization/locking than `synchronized`.
+	- Locking can guarantee both visibility and atomicity, volatile variables can only guarantee visibility.
+	- Visibility
+		- Compiler/runtime put on notice that a variable declared with `volatile` is shared and operations on it should not be reordered with other memory operations.
+		- Volatile variables are not cached in registers or in caches where they can be stale.
+		- This means a read of a volatile variable always return the most recent write by any thread.
+	- No atomicity
+		- Accessing a volatile variable performs no locking, so cannot block the executing thread.
+	- Usage
