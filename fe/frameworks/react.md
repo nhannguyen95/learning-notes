@@ -15,7 +15,10 @@ Pure functions:
 - Does not mutate already existing variables.
 - Given same input, produces same output.
 
-React components rendering process should be pure function: they does not change preexisting variables (props, state, context, DOM nodes, etc.).
+React components rendering process should be pure function:
+- Does not mutate already existing variables: they does not change preexisting variables (props, state, context, DOM nodes, etc.).
+- Given same input, produces same output: this can imply many things:
+  - Reading preexisting mutable variables (since they can be changed elsewhere), so you shouldn't even read (let alone write) mutable variables (like `ref.current`) during rendering.
 
 Benefits of pure React components:
 - The component can run in different environments.
@@ -324,19 +327,29 @@ Best practices:
 
 ## `useEffect`
 
-### Types of React comopnents logic
+### Types of React components logic
 
 3 types:
 - Rendering logic: calculate JSX from props/states. Rendering logic must be pure.
-- Event handlers: side effects triggered by user actions.
-- Effects: side effects triggered by rendering (e.g. connecting to a server when the component is visible on the screen). **Effects run at end of commit phase after screen updates**.
+- Event handlers:
+  - Side effects triggered by user actions.
+- Effects:
+  - Side effects triggered by rendering/changes in [reactive values](#reactive-values).
+  - Used to synchronize an external system to the current props and state.
+  - **Effects run at end of commit phase after screen updates**.
 
 ### `useEffect` behavior
 
+It was tempting to think of Effects as "callbacks" or "lifecycle events" that fire at a specific time like "after a render" or "before unmount". This way of thinking gets complicated very fast thus should be avoided.
+
+Instead, always focus on a single start/stop synchronization cycle at a time.
+
 ```typescript
 useEffect(() => {
+  // Synchronization start:
   // This runs after every render.
   return () => {
+    // Synchronization stop (cleanup function):
     // This runs each time before the Effect runs again,
     // and one final time when the component unmounts (gets removed).
   };
@@ -344,10 +357,16 @@ useEffect(() => {
 
 useEffect(() => {
   // This runs only on mount (when the component appears).
+  return () => {
+    // Same as above.
+  };
 }, []);
 
 useEffect(() => {
   // This runs on mount and also if either a or b have changed since the last render.
+  return () => {
+    // Same as above.
+  };
 }, [a, b]);
 ```
 
@@ -461,14 +480,36 @@ Recommendations:
   }
   ```
 - Reset/adjust the state (or part of it) when a props changes, but not all: consider "unstate"/restructure the state of the variables which depend on the props and directly calculate it from the props during rendering.
+- Notify parent components about state changes:
+  ```typescript
+  function Toggle({ onChange }) {
+    const [isOn, setIsOn] = useState(false);
+
+    // 🔴 Bad: the effect only runs after the screen gets updated with new isOn.
+    useEffect(() => {
+      onChange(isOn);
+    }, [isOn]);
+
+    function handleClick() {
+      setIsOn(!isOn);
+      // ✅ Good: Perform all updates during the event that caused them.
+      onChange(!isOn);
+    }
+  }
+  ```
+
+### Other best practices
+- Each Effect in your code should represent a separate and independent synchronization process.
+- When there's some logic in an Effect that access/read (the latest) reactive values, but you don't want the whole Effect reacts to that values, there are 2 solutions:
+  - Exclude those reactive values from the dependency array, however depending on your lint configuration this may cause a linting error (plus, supressing it is never recommended).
+  - Extract that logic into an Effect Event using `useEffectEvent`, some notes:
+    - Only call Effect Events from inside Effects.
+    - Never pass them to other components or Hooks.
+- Subscribe to an external store: consider using `useSyncExternalStore` instead.
 
 ### Reference
 
 React compares the dependency values using `Object.is` comparision.
-
-Some dependencies you can omit from the dependency array since they have a stable identity:
-- Refs: same `useRef` call returns same object on every render.
-- The set functions returned by `useState`.
 
 ## Passing data
 
@@ -485,3 +526,12 @@ Context use cases:
 - Routing.
 - Managing state: you can combine reducers and context together to manage state of a complex screen (create the context, then put state and dispatch into the context, finally use context anywhere in the tree).
 
+## Reactive values
+
+Reactive values used in dependency array in some hooks:
+- Props, state.
+- All variables declared/calculated in the component body, since they can change on a re-render.
+
+Some values you can omit from the dependency array since they have a stable identity:
+- Refs: same `useRef` call returns same object on every render.
+- The set functions returned by `useState`.
