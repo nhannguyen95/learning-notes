@@ -92,10 +92,67 @@ mindmap-plugin: basic
 - #volatile variables
 	- `volatile` is an alternative, weaker form of synchronization/locking than `synchronized`.
 	- Locking can guarantee both visibility and atomicity, volatile variables can only guarantee visibility.
-	- Visibility
-		- Compiler/runtime put on notice that a variable declared with `volatile` is shared and operations on it should not be reordered with other memory operations.
-		- Volatile variables are not cached in registers or in caches where they can be stale.
-		- This means a read of a volatile variable always return the most recent write by any thread.
-	- No atomicity
-		- Accessing a volatile variable performs no locking, so cannot block the executing thread.
+		- Visibility
+			- Compiler/runtime put on notice that a variable declared with `volatile` is shared and operations on it should not be reordered with other memory operations.
+			- Volatile variables are not cached in registers or in caches where they can be stale.
+			- This means a read of a volatile variable always return the most recent write by any thread.
+		- No atomicity
+			- Accessing a volatile variable performs no locking, so cannot block the executing thread.
+			- This means with volatile `count`, `count++` is not atomic.
+	- On most current processor architectures, volatile reads are only slightly more expensive than nonvolatile ones.
 	- Usage
+		- Using volatile variables for status flags.
+			- State information of objects.
+			- Indicating object's important life-cycle events (shutdown, initialization) has occurred.
+		- Can be used when all these criteria are met
+			- Writes to the variable do not depend on its current value.
+			- The variable does not participate in invariants (invariant = object state) with other state variables.
+			- Locking is not required while the variable is being accessed.
+- #thread-confinement
+	- If data is only accessed from a single thread, no synchronization is needed.
+	- If an object is confined to a thread, its usage is automatically thread-safe even if the object is not.
+	- Thread confinement is one of the simplest ways to achieve thread safety.
+	- Achieving thread confinement
+		- Ad-hoc thread confinement
+			- The implementation (not any library) is responsible for maintaining thread confinement.
+			- Should be used sparingly due to its fragility.
+		- #stack-confinement
+			- Each thread has their own stack, so threads do not share their local variables.
+			- This means local variables are intrinsically confined to the executing thread.
+			- As a consequence, if an object can only be reached through local variables, it is confined to the thread executing those variables.
+			- This is called stack confinement (or #within-thread, #thread-local, not to be confused with `ThreadLocal` library), it is a special case of thread confinement.
+			- Stack confinement is simpler to maintain and less fragile than ad-hoc thread confinement.
+			- Example
+
+				-
+				  ```java
+				  private long numberOfPeopleNamedJohn(List<Person> people) {
+				  // We're passing a list of person but do not directly use it.
+				  
+				  // Instead, we create our own list that is local to the
+				  // executing thread.
+				  List<Person> localPeople = new ArrayList<>();
+				  
+				  // Using the local list is thread-safe (even if its implementation
+				  // might not), we just need to make sure
+				  // it won't escape the method scope.
+				  localPeople.addAll(people);
+				  
+				  // Note that it is the List<Person> is stack confined, not the
+				  // People elements it contains.
+				  
+				  // Stack confinement implies a need of a deep copy
+				  // (in this case from people list to localPeople list) (?).
+				  
+				  return localPeople
+				  .stream()
+				  .filter(person -> person.getFirstName().equals("John"))
+				  .count();
+				  }
+				  ```
+
+		- `ThreadLocal`
+			- Allows you to associate a per-thread value (`T`) with a value-holding object (`ThreadLocal<T>`).
+			- You can think of a `ThreadLocal<T>` as holding a `Map<Thread, T>` that stores the thread-specific value.
+			- `ThreadLocal` provides `get` and `set` methods such that `get` returns the most recent value passed to set from the currently executing thread.
+			- It is a more formal means of maintaining thread confinement.
