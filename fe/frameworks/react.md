@@ -499,17 +499,28 @@ Recommendations:
   ```
 
 ### Other best practices
-- Each Effect in your code should represent a separate and independent synchronization process.
-- When there's some logic in an Effect that access/read (the latest) reactive values, but you don't want the whole Effect reacts to that values, there are 2 solutions:
-  - Exclude those reactive values from the dependency array, however depending on your lint configuration this may cause a linting error (plus, supressing it is never recommended).
+- Each Effect in your code should represent/be responsible for a separate and independent synchronization process.
+- When there's some logic in an Effect that access/read (the latest) reactive values, but you don't want the whole Effect reacts to that values, there are 2 (or 3) solutions:
+  - Exclude those reactive values from the dependency array, however depending on your lint configuration this may cause a linting error (plus, supressing it is never recommended, since you are lying to React about your dependency list).
   - Extract that logic into an Effect Event using `useEffectEvent`, some notes:
     - Only call Effect Events from inside Effects.
     - Never pass them to other components or Hooks.
+  - If you are reading some state in order to calculate its next value, use the updater function:
+  ```typescript
+  useEffect(() => {
+    setCount(count => count + 2);
+  }, []);  // count no need to be in the dependency list, thus change in count
+           // does not trigger the Effect.
+  ```
 - Subscribe to an external store: consider using `useSyncExternalStore` instead.
+- You don't choose what to put on the dependency list, the list *describes* your code. Thus if you want to change the dependency list, change the code first.
+- Since objects and functions declared inside the components change during re-renders, you should try to avoid them as your Effect's dependencies. Instead, try moving them outside the component, inside the Effect, or extracting primitives values out of them.
+- Effects let you step out of React and synchronize with external system. When you write custom hooks that utilize `useEffect`, you can refactor the custom hooks in a way that extracts their logic out into some classes/modules that act as the external system. This lets your custom hooks/Effects stay simple because they only need to send messages to the system you have moved outside React.
 
 ### Reference
 
 React compares the dependency values using `Object.is` comparision.
+
 
 ## Passing data
 
@@ -528,7 +539,7 @@ Context use cases:
 
 ## Reactive values
 
-Reactive values used in dependency array in some hooks:
+Reactive values are values that can change due to a re-render:
 - Props, state.
 - All variables declared/calculated in the component body, since they can change on a re-render.
 
