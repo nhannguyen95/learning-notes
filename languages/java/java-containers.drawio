@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-12-04T14:32:45.364Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="CvLkwHdGSRoOQmRllhc9" version="22.1.2" type="device">
+<mxfile host="Electron" modified="2023-12-07T13:54:37.439Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="Rg1TIUae1e_hOxpdizVz" version="22.1.2" type="device">
   <diagram name="Page-1" id="rgzXXpZxuQ33LzNDmdkQ">
-    <mxGraphModel dx="3465" dy="1204" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+    <mxGraphModel dx="2680" dy="697" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -101,7 +101,7 @@
           <mxGeometry y="95" width="321" height="116" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-5" value="&lt;b style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;LinkedList&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=27;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="156" y="839" width="206" height="104" as="geometry" />
+          <mxGeometry x="156" y="839" width="206" height="130" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-6" value="//" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-5">
           <mxGeometry y="27" width="206" height="26" as="geometry" />
@@ -109,11 +109,11 @@
         <mxCell id="FApFlZrMrufbnj_ad8FX-7" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-5">
           <mxGeometry y="53" width="206" height="8" as="geometry" />
         </mxCell>
-        <mxCell id="FApFlZrMrufbnj_ad8FX-8" value="-&amp;nbsp;Since 1.2 (Dec 1998).&lt;br&gt;- &lt;font color=&quot;#ff0000&quot;&gt;&lt;b&gt;null is allowed&lt;/b&gt;.&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-5">
-          <mxGeometry y="61" width="206" height="43" as="geometry" />
+        <mxCell id="FApFlZrMrufbnj_ad8FX-8" value="-&amp;nbsp;Since 1.2 (Dec 1998).&lt;br&gt;- &lt;b style=&quot;color: rgb(255, 0, 0);&quot;&gt;null is allowed&lt;/b&gt;&lt;font color=&quot;#ff0000&quot;&gt;.&lt;/font&gt;&lt;br&gt;- Doubly-linked list implementation of List and Deque interface." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-5">
+          <mxGeometry y="61" width="206" height="69" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-10" value="&lt;b style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;ArrayList&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=27;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="-165" y="839" width="206" height="104" as="geometry" />
+          <mxGeometry x="-165" y="839" width="206" height="142" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-11" value="//" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-10">
           <mxGeometry y="27" width="206" height="26" as="geometry" />
@@ -121,14 +121,14 @@
         <mxCell id="FApFlZrMrufbnj_ad8FX-12" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-10">
           <mxGeometry y="53" width="206" height="8" as="geometry" />
         </mxCell>
-        <mxCell id="FApFlZrMrufbnj_ad8FX-13" value="-&amp;nbsp;Since 1.2 (Dec 1998).&lt;br&gt;- Not thread-safe." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-10">
-          <mxGeometry y="61" width="206" height="43" as="geometry" />
+        <mxCell id="FApFlZrMrufbnj_ad8FX-13" value="-&amp;nbsp;Since 1.2 (Dec 1998).&lt;br&gt;-&amp;nbsp;&lt;b style=&quot;border-color: var(--border-color); color: rgb(255, 0, 0);&quot;&gt;null is allowed&lt;/b&gt;&lt;font style=&quot;border-color: var(--border-color);&quot; color=&quot;#ff0000&quot;&gt;.&lt;/font&gt;&lt;br&gt;- Not thread-safe.&lt;br&gt;- Resizable-array implementation of List interface." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-10">
+          <mxGeometry y="61" width="206" height="81" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="FApFlZrMrufbnj_ad8FX-14" target="FApFlZrMrufbnj_ad8FX-21">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-14" value="&lt;b style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;Vector&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=27;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="-502" y="839" width="206" height="128" as="geometry" />
+          <mxGeometry x="-502" y="839" width="206" height="176" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-15" value="//" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-14">
           <mxGeometry y="27" width="206" height="25" as="geometry" />
@@ -136,11 +136,11 @@
         <mxCell id="FApFlZrMrufbnj_ad8FX-16" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-14">
           <mxGeometry y="52" width="206" height="8" as="geometry" />
         </mxCell>
-        <mxCell id="FApFlZrMrufbnj_ad8FX-17" value="-&amp;nbsp;Since 1.0 (Jan 1996).&lt;br&gt;- Thread-safe.&lt;br&gt;- If thread-safe is not needed, use ArrayList." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-14">
-          <mxGeometry y="60" width="206" height="68" as="geometry" />
+        <mxCell id="FApFlZrMrufbnj_ad8FX-17" value="-&amp;nbsp;Since 1.0 (Jan 1996).&lt;br&gt;-&amp;nbsp;&lt;b style=&quot;border-color: var(--border-color); color: rgb(255, 0, 0);&quot;&gt;null is allowed&lt;/b&gt;&lt;font style=&quot;border-color: var(--border-color);&quot; color=&quot;#ff0000&quot;&gt;.&lt;/font&gt;&lt;br&gt;- Thread-safe.&lt;br&gt;- Resizable-array implementation of List.&lt;br&gt;- If thread-safe is not needed, use ArrayList." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-14">
+          <mxGeometry y="60" width="206" height="116" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-21" value="&lt;b style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;Stack&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=27;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="-502" y="1038" width="206" height="122" as="geometry" />
+          <mxGeometry x="-502" y="1109" width="206" height="122" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-22" value="//" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-21">
           <mxGeometry y="27" width="206" height="29" as="geometry" />
