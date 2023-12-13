@@ -505,7 +505,7 @@ Recommendations:
   - Extract that logic into an Effect Event using `useEffectEvent`, some notes:
     - Only call Effect Events from inside Effects.
     - Never pass them to other components or Hooks.
-  - If you are reading some state in order to calculate its next value, use the updater function:
+  - If you are reading some state only to calculate its next value, use the updater function (this can be applied to all Hooks that require a dependency array, such as `useCallback`):
   ```typescript
   useEffect(() => {
     setCount(count => count + 2);
@@ -521,6 +521,40 @@ Recommendations:
 
 React compares the dependency values using `Object.is` comparision.
 
+
+## `useCallback`
+
+Used to cache a function between re-renders:
+
+```typescript
+const cachedFn = useCallback((args) => {
+
+}, [deps]);
+```
+
+Note that in JavaScript, a `function () {}` or `() => {}` always creates a different function, similar to how the `{}` object literal always creates a new object. This means in the snippet above, the function wrapped by `useCallback` is always created in each render, but it ignores it and gives you back a cached function if nothing changed.
+
+`useCallback` is only valuable in a few cases:
+- You pass it as a prop to a component wrapped in `memo`.
+- The function you're passing is later used as a dependency of some Hook (e.g. `useEffect`, or another `useCallback`).
+
+There is neither benefit nor harm using it in other cases.
+
+In practice, you can make a lot of memoization unnecessary by following a few principles:
+- When a component visually wraps other components, let it accept JSX as children. Then, if the wrapper component updates its own state, React knows that its children don’t need to re-render.
+- Instead of caching a function/object, it's often simpler to move them inside a Hook (if the function/object is one of the dependencies of the Hook) or outside the component (if the function/object is passed as props to the component's children).
+
+Some best practices:
+- If you're writing custom Hooks, it's recommend to wrap any functions it returns into `useCallback`.
+
+
+## React APIs
+
+### `memo`
+
+By default, when a component re-renders, React re-renders all of its children recursively, **even the props of a child component are the same as on last render**.
+
+To skip re-renders when props are same as on last render, we can wrap the component in `memo`.
 
 ## Passing data
 
