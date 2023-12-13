@@ -1,15 +1,13 @@
-## JSX
+## Concepts
+
+### JSX
 
 - JSX = Javascript XML.
 - JSX allows writing HTML elements inside Javascript code. It converts HTML tags (`<h1>`, `<MyButton>`, etc.) into React elements and place them in the DOM by calling `React.createElement`, `React.appendChild`, etc.
 - The above conversion from JSX to native Javascript can be done by a transpiler like Babel.
 - React and JSX are 2 separate things. React doesn't require JSX, but it's helpful as a visual aid when working with UI inside Javascript code.
 
-## Fragment
-
-Fragment is an empty tag (`<> </>`), used to group things without leaving any trace in the browser HTML tree.
-
-## Purity
+### Purity
 
 Pure functions:
 - Does not mutate already existing variables.
@@ -24,7 +22,7 @@ Benefits of pure React components:
 - The component can run in different environments.
 - Enabling rendering skipping when component's inputs are not changed.
 
-## Event propagation
+### Event Propagation
 
 Each event propagates in 3 phases:
 - It travels down from parent to clicked element, calling all event capture handlers (e.g. `onClickCapture`).
@@ -34,77 +32,7 @@ Event propagation does not work for `onScroll` which only called on the JSX tag 
 
 You can stop the propagation of an event by using `event.stopPropagation()`.
 
-## How useState works
-
-```typescript
-let componentHooks = [];
-let currentHookIndex = 0;
-
-// How useState works inside React (simplified).
-function useState(initialState) {
-  let pair = componentHooks[currentHookIndex];
-  if (pair) {
-    // This is not the first render,
-    // so the state pair already exists.
-    // Return it and prepare for next Hook call.
-    currentHookIndex++;
-    return pair;
-  }
-
-  // This is the first time we're rendering,
-  // so create a state pair and store it.
-  pair = [initialState, setState];
-
-  function setState(nextState) {
-    // When the user requests a state change,
-    // put the new value into the pair.
-    pair[0] = nextState;
-    updateDOM();
-  }
-
-  // Store the pair for future renders
-  // and prepare for the next Hook call.
-  componentHooks[currentHookIndex] = pair;
-  currentHookIndex++;
-  return pair;
-}
-
-function Counter() {
-  const [count, setCount] = useState(0);
-
-  function handleOnClick() {
-    setCount(count + 1);
-    setTimeout(() => {
-      alert(count);
-    }, 5000);
-  }
-  
-  return {
-    onClick: handleOnClick,
-    counter: `Clicked ${count} times`,
-  };
-}
-
-function updateDOM() {
-  // Reset the current Hook index
-  // before rendering the component.
-  currentHookIndex = 0;
-  let output = Counter();
-  
-  // Update the DOM to match the output snapshot.
-  // This is the part React does for you.
-  counter.textContent = output.counter;
-  counter.onClick = output.onClick;
-}
-
-let counter = document.getElementById('counter');
-```
-
-- When calling `useState`, React gives you a snapshot of the state for that render (`output`).
-- Variables and event handlers don't "survive" re-renders, every render has its own event handlers. Every render (and functions inside it) will always see the snapshot of the state that React gave to that render.
-	- This means event handlers created in the past have the state values from the render in which they where created. This explains why `alert` shows `count` instead of `count + 1` even after 5 seconds which is the time by then the `Counter` component should have already been re-rendered.
-
-## React rendering process
+### Rendering Process
 
 - Triggering a render.
 	- On initial render.
@@ -118,32 +46,7 @@ let counter = document.getElementById('counter');
 
 After that, the browser will repaint the screen, this is known as "browser rendering".
 
-## Batching
-
-React waits until all code in the event handlers has run before processing your state updates. This means if there're multiple `setState` calls inside an event handler, they are batched.
-
-React does not batch across multiple intentional events (like clicks), each event handler is handled separately.
-
-React batches `setState` calls by put them into a queue:
-- `setState(v)`: adding `replace with v` to the queue.
-- `setState(v => v + 1)`: adding the updater function `v => v + 1` to the queue.
-
-```typescript
-const [n, setN] = useState(0);
-
-// Inside some event handler:
-
-// In next render, n = 6
-setN(n + 5);
-setN(n => n + 1);
-
-// In next render, n = 42
-setN(n + 5);
-setN(n => n + 1);
-setN(42);
-```
-
-## State
+### State Preservation
 
 Component identity = component type (e.g. `Counter`, `h1`, etc.) + its position/structure in render tree (e.g. `root>div>div>Counter`).
 
@@ -221,22 +124,206 @@ function App() {
 }
 ```
 
-## `useReducer`
+### Passing Data
 
-### Writing reducers
+Some ways to pass data to children components:
+- Passing props: when the component in need of the data is not distant from the data-provider component.
+- Extract components and pass JSX as `children`: when the component in need of the data is distant from the data-provider component and intermmediate components do not need the data.
+- Using context: when the data is needed by distant components in different parts of the tree.
+
+### Component Memoization
+
+**By default, when a component re-renders, React re-renders all of its children recursively, even the props of a child component are the same as on last render**
+```typescript
+function Parent() {
+  // ...
+  return (
+    // when Parent re-renders, Child always re-renders,
+    // even attributes didn't change.
+    <Child attributes={attributes} />
+  );
+}
+
+function Child({ attributes }) {
+  // ...
+}
+```
+
+The reason why this behavior is default is because memoizing every components by default has its downsides:
+- Memoization itself incurs a perf cost in comparing values from one render to the next.
+- "Premature Optimization Is the Root of All Evil".
+
+There are 2 ways to memoize the `Child` component:
+- Wrapping it in `memo`: see [memo](#memo).
+- Wrapping the calculation of `Child` JSX node in `useMemo`:
+
+  If React sees the same exact JSX node object as during the previous render, it won't try to re-render your component.
+
+  A node like `<Child attributes={attributes} />` is an object like `{ type: Child, props: { attributes: attributes } }`. Everytime Parent re-renders, a new object is created, thus React always re-renders `Child`. To avoid this, we can wrap `<Child />` in `useMemo`:
+
+  ```typescript
+  function Parent() {
+    // ...
+    const children = useMemo(() => <Child attributes={attributes} />, [attributes]);
+    return (
+      {children}
+    );
+  }
+  ```
+
+  It's however recommended to wrap components with `memo` instead since it's more convenient.
+
+## Components
+
+### Fragment
+
+Fragment is an empty tag (`<> </>`), used to group things without leaving any trace in the browser HTML tree.
+
+## Hooks
+
+### Reactive values
+
+Reactive values are values that can change due to a re-render:
+- Props, state.
+- All variables declared/calculated in the component body, since they can change on a re-render.
+
+Some values you can omit from the dependency array of Hooks since they have a stable identity:
+- Refs: same `useRef` call returns same object on every render.
+- The set functions returned by `useState`.
+
+React compares the dependency values using `Object.is` comparision.
+
+### `useState`
+
+#### How it works
+
+```typescript
+let componentHooks = [];
+let currentHookIndex = 0;
+
+// How useState works inside React (simplified).
+function useState(initialState) {
+  let pair = componentHooks[currentHookIndex];
+  if (pair) {
+    // This is not the first render,
+    // so the state pair already exists.
+    // Return it and prepare for next Hook call.
+    currentHookIndex++;
+    return pair;
+  }
+
+  // This is the first time we're rendering,
+  // so create a state pair and store it.
+  pair = [initialState, setState];
+
+  function setState(nextState) {
+    // When the user requests a state change,
+    // put the new value into the pair.
+    pair[0] = nextState;
+    updateDOM();
+  }
+
+  // Store the pair for future renders
+  // and prepare for the next Hook call.
+  componentHooks[currentHookIndex] = pair;
+  currentHookIndex++;
+  return pair;
+}
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  function handleOnClick() {
+    setCount(count + 1);
+    setTimeout(() => {
+      alert(count);
+    }, 5000);
+  }
+  
+  return {
+    onClick: handleOnClick,
+    counter: `Clicked ${count} times`,
+  };
+}
+
+function updateDOM() {
+  // Reset the current Hook index
+  // before rendering the component.
+  currentHookIndex = 0;
+  let output = Counter();
+  
+  // Update the DOM to match the output snapshot.
+  // This is the part React does for you.
+  counter.textContent = output.counter;
+  counter.onClick = output.onClick;
+}
+
+let counter = document.getElementById('counter');
+```
+
+- When calling `useState`, React gives you a snapshot of the state for that render (`output`).
+- Variables and event handlers don't "survive" re-renders, every render has its own event handlers. Every render (and functions inside it) will always see the snapshot of the state that React gave to that render.
+	- This means event handlers created in the past have the state values from the render in which they where created. This explains why `alert` shows `count` instead of `count + 1` even after 5 seconds which is the time by then the `Counter` component should have already been re-rendered.
+
+#### Batching
+
+React waits until all code in the event handlers has run before processing your state updates. This means if there're multiple `setState` calls inside an event handler, they are batched.
+
+React does not batch across multiple intentional events (like clicks), each event handler is handled separately.
+
+React batches `setState` calls by put them into a queue:
+- `setState(v)`: adding `replace with v` to the queue.
+- `setState(v => v + 1)`: adding the updater function `v => v + 1` to the queue.
+
+```typescript
+const [n, setN] = useState(0);
+
+// Inside some event handler:
+
+// In next render, n = 6
+setN(n + 5);
+setN(n => n + 1);
+
+// In next render, n = 42
+setN(n + 5);
+setN(n => n + 1);
+setN(42);
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### `useReducer`
+
+#### Writing reducers
 
 - Reducers must be pure, since similar to state updater functions, they run during rendering.
 - Each action describes a single user interaction, even if that leads to multiple changes in the data.
 
-### Comparing `useState` and `useReducer`
+#### Comparing `useState` and `useReducer`
 
 - Code size: with `useState` you don't have to write a lot of (boilerplate) code upfront.
 - Debugging: with `useReducer` it can be easier to tell where and why the state was set incorrectly by examining the state and the action that triggered the state update.
 - Testing: a reducer is a pure function and does not depend on your component. This means you can export and test it separately.
 
-## `useRef`
 
-### Managing the DOM
+
+
+### `useRef`
 
 DOM manipulation is the most common use case for refs. Sometimes you might need access to the DOM elements managed by React (e.g. to focus a node, scroll to it, or measured its size and position):
 
@@ -325,9 +412,9 @@ Best practices:
 - Avoid changing DOM nodes managed by React: for example modifying, adding children to, or removing children from elements that are managed by React can lead to inconsistent visual results or crashes.
 - If you must do it, do it with caution. You can safely modify parts of the DOM that React has no reason to update.
 
-## `useEffect`
+### `useEffect`
 
-### Types of React components logic
+#### Types of React components logic
 
 3 types:
 - Rendering logic: calculate JSX from props/states. Rendering logic must be pure.
@@ -338,7 +425,7 @@ Best practices:
   - Used to synchronize an external system to the current props and state.
   - **Effects run at end of commit phase after screen updates**.
 
-### `useEffect` behavior
+#### `useEffect` behavior
 
 It was tempting to think of Effects as "callbacks" or "lifecycle events" that fire at a specific time like "after a render" or "before unmount". This way of thinking gets complicated very fast thus should be avoided.
 
@@ -372,7 +459,7 @@ useEffect(() => {
 
 Note that in development mode, React intentionally remounts your components once immediately after its initial mount and whenever you save a file.
 
-### Fetching data in Effects
+#### Fetching data in Effects
 
 Downsides:
 - Effects don't run on servers: The initial-rendered HTML only includes a loading state with no data. Client has to download all JavaScript and render your app just to discover that it now needs the data.
@@ -442,7 +529,7 @@ Recommendations:
 - If you use a Framework, use its built-in data fetching mechanism.
 - Otherwise, using/building a client-side cache: React Query, useSWR, React Router 6.4+, etc. In case developing your own, you would use Effects under the hood but add logic for deduplication requests, caching responses, avoiding network waterfalls by preloading data or hoisting data requirements to routes.
 
-### You might not need an Effect
+#### You might not need an Effect
 - When something can be calculated from existing props/states, calculate it during rendering. If the calculation is expensive, `useMemo` can be used to cache the result.
 - When you want to reset the state when a prop changes, consider giving your component an identity by passing `key`:
   ```typescript
@@ -498,7 +585,7 @@ Recommendations:
   }
   ```
 
-### Other best practices
+#### Other best practices
 - Each Effect in your code should represent/be responsible for a separate and independent synchronization process.
 - When there's some logic in an Effect that access/read (the latest) reactive values, but you don't want the whole Effect reacts to that values, there are 2 (or 3) solutions:
   - Exclude those reactive values from the dependency array, however depending on your lint configuration this may cause a linting error (plus, supressing it is never recommended, since you are lying to React about your dependency list).
@@ -517,12 +604,7 @@ Recommendations:
 - Since objects and functions declared inside the components change during re-renders, you should try to avoid them as your Effect's dependencies. Instead, try moving them outside the component, inside the Effect, or extracting primitives values out of them.
 - Effects let you step out of React and synchronize with external system. When you write custom hooks that utilize `useEffect`, you can refactor the custom hooks in a way that extracts their logic out into some classes/modules that act as the external system. This lets your custom hooks/Effects stay simple because they only need to send messages to the system you have moved outside React.
 
-### Reference
-
-React compares the dependency values using `Object.is` comparision.
-
-
-## `useCallback`
+### `useCallback`
 
 Used to cache a function between re-renders:
 
@@ -547,8 +629,29 @@ In practice, you can make a lot of memoization unnecessary by following a few pr
 Some best practices:
 - If you're writing custom Hooks, it's recommend to wrap any functions it returns into `useCallback`.
 
+### `useMemo`
 
-## React APIs
+Used to cache result of a calculation between re-renders:
+
+```typescript
+const cachedResult = useMemo(() => fn(deps), [deps]);
+```
+
+`useMemo` is only valuable in a few cases:
+- The calculation put in `useMemo` is noticeably slow, and its dependencies rarely change.
+- You pass the calculation result as a prop to a component wrapped in `memo`.
+- The calculation result is later used as a dependency of some Hook.
+
+There is neither benefit nor harm using it in other cases.
+
+In practice, you can make a lot of memoization unnecessary by following a few principles:
+- When a component visually wraps other components, let it accept JSX as children. Then, if the wrapper component updates its own state, React knows that its children don’t need to re-render.
+- Don't lift the state up any further than necessary.
+- Keep your rendering logic pure.
+- Avoid unnecessary Effects that update state.
+- Try to remove unnecessary dependencies from your Effects. For example, instead of caching a function/object, it's often simpler to move them inside a Hook (if the function/object is one of the dependencies of the Hook) or outside the component (if the function/object is passed as props to the component's children).
+
+## APIs
 
 ### `memo`
 
@@ -556,27 +659,10 @@ By default, when a component re-renders, React re-renders all of its children re
 
 To skip re-renders when props are same as on last render, we can wrap the component in `memo`.
 
-## Passing data
-
-Some ways to pass data to children components:
-- Passing props: when the component in need of the data is not distant from the data-provider component.
-- Extract components and pass JSX as `children`: when the component in need of the data is distant from the data-provider component and intermmediate components do not need the data.
-- Using context: when the data is needed by distant components in different parts of the tree.
-
-## Context
+### Context
 
 Context use cases:
 - Theming.
 - Current account.
 - Routing.
 - Managing state: you can combine reducers and context together to manage state of a complex screen (create the context, then put state and dispatch into the context, finally use context anywhere in the tree).
-
-## Reactive values
-
-Reactive values are values that can change due to a re-render:
-- Props, state.
-- All variables declared/calculated in the component body, since they can change on a re-render.
-
-Some values you can omit from the dependency array since they have a stable identity:
-- Refs: same `useRef` call returns same object on every render.
-- The set functions returned by `useState`.
