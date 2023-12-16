@@ -1,22 +1,12 @@
-<mxfile host="Electron" modified="2023-12-07T13:54:37.439Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="Rg1TIUae1e_hOxpdizVz" version="22.1.2" type="device">
+<mxfile host="Electron" modified="2023-12-16T06:19:29.252Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="2SesdyKMyK0zeQ3PBU4b" version="22.1.2" type="device">
   <diagram name="Page-1" id="rgzXXpZxuQ33LzNDmdkQ">
-    <mxGraphModel dx="2680" dy="697" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+    <mxGraphModel dx="3880" dy="1471" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="xqsKgH8Ro8fH1hyzLg4l-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="FApFlZrMrufbnj_ad8FX-26" target="xqsKgH8Ro8fH1hyzLg4l-49" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="673" y="415.5" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="xqsKgH8Ro8fH1hyzLg4l-19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="xqsKgH8Ro8fH1hyzLg4l-18" target="xqsKgH8Ro8fH1hyzLg4l-49" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="811" y="415.5" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="xqsKgH8Ro8fH1hyzLg4l-17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="xqsKgH8Ro8fH1hyzLg4l-16" target="xqsKgH8Ro8fH1hyzLg4l-45" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="811" y="614.5" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="xqsKgH8Ro8fH1hyzLg4l-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="FApFlZrMrufbnj_ad8FX-5" target="FApFlZrMrufbnj_ad8FX-27" edge="1">
@@ -28,15 +18,6 @@
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="-122" y="597" as="targetPoint" />
           </mxGeometry>
-        </mxCell>
-        <mxCell id="xqsKgH8Ro8fH1hyzLg4l-16" value="&lt;b&gt;PriorityQueue&lt;/b&gt;" style="whiteSpace=wrap;html=1;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-          <mxGeometry x="1129" y="816" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="FApFlZrMrufbnj_ad8FX-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="FApFlZrMrufbnj_ad8FX-31" target="xqsKgH8Ro8fH1hyzLg4l-18">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="xqsKgH8Ro8fH1hyzLg4l-18" value="&lt;b&gt;Set&lt;/b&gt;&lt;br&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;" style="whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="1284" y="562" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="xqsKgH8Ro8fH1hyzLg4l-67" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="xqsKgH8Ro8fH1hyzLg4l-58" target="xqsKgH8Ro8fH1hyzLg4l-44" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -69,9 +50,6 @@
         </mxCell>
         <mxCell id="xqsKgH8Ro8fH1hyzLg4l-51" value="-&amp;nbsp;Since 1.2 (Dec 1998)." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="xqsKgH8Ro8fH1hyzLg4l-48" vertex="1">
           <mxGeometry y="115" width="206" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="xqsKgH8Ro8fH1hyzLg4l-66" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="xqsKgH8Ro8fH1hyzLg4l-16" target="xqsKgH8Ro8fH1hyzLg4l-58" edge="1">
-          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="xqsKgH8Ro8fH1hyzLg4l-72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="xqsKgH8Ro8fH1hyzLg4l-58" target="xqsKgH8Ro8fH1hyzLg4l-68" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -166,26 +144,28 @@
         <mxCell id="FApFlZrMrufbnj_ad8FX-29" value="-&amp;nbsp;Since 1.2 (Dec 1998).&lt;br&gt;- Provides methods for positional (indexed) access to elements (these operations may execute in time proportional to the index value for some implementations, e.g. LinkedList).&lt;br&gt;- Some implementations may have restrictions on the elements they contain (e.g. null).&lt;br&gt;- Some implementations may throw an exception or return false on invalid operations." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-26">
           <mxGeometry y="153" width="276" height="146" as="geometry" />
         </mxCell>
-        <mxCell id="FApFlZrMrufbnj_ad8FX-31" value="&lt;b&gt;HashSet&lt;/b&gt;" style="whiteSpace=wrap;html=1;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="1284" y="816" width="120" height="60" as="geometry" />
+        <mxCell id="FApFlZrMrufbnj_ad8FX-59" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="FApFlZrMrufbnj_ad8FX-60" target="FApFlZrMrufbnj_ad8FX-53">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1489.9999999999995" y="981" as="sourcePoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="FApFlZrMrufbnj_ad8FX-37" target="FApFlZrMrufbnj_ad8FX-33">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-33" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;«interface»&lt;br style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;&lt;/span&gt;&lt;b style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;Map&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=39;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
-          <mxGeometry x="1633" y="228" width="384" height="360" as="geometry" />
+          <mxGeometry x="2011" y="228" width="384" height="425" as="geometry" />
         </mxCell>
-        <mxCell id="FApFlZrMrufbnj_ad8FX-34" value="- &lt;font color=&quot;#cc00cc&quot;&gt;boolean containsKey(k)&lt;/font&gt;: returns true if&amp;nbsp;∃ key | k == null ? key == null : k.equals(key).&lt;br&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;V get(k)&lt;/font&gt;: returns null if k does not exist. Note that that is no longer necessarily true if the map impl permits null values, in that case containsKey can be used to distinguish these 2 cases.&lt;br&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;V getOrDefault(k, V)&lt;/font&gt;: returns a default value if k does not exist.&lt;br&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;V put(k, V)&lt;/font&gt;: creates/replaces a mapping, returns null (if there was no mapping) or previous value associated with k.&lt;br&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;V remove(k)&lt;/font&gt;: removes mapping for the key k, returns its value, or null if such mapping didn&#39;t exist. Note that that is no longer necessarily true if the map imp permits null values.&amp;nbsp;&lt;br&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;void clear()&lt;/font&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;boolean isEmpty()&lt;/font&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;-&lt;font color=&quot;#cc00cc&quot;&gt; int size()&lt;/font&gt;: returns number of mappings." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-33">
-          <mxGeometry y="39" width="384" height="217" as="geometry" />
+        <mxCell id="FApFlZrMrufbnj_ad8FX-34" value="- &lt;font color=&quot;#cc00cc&quot;&gt;boolean containsKey(k)&lt;/font&gt;: returns true if&amp;nbsp;∃ key | k == null ? key == null : k.equals(key).&lt;br&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;V get(k)&lt;/font&gt;: returns null if k does not exist. Note that that is no longer necessarily true if the map impl permits null values, in that case containsKey can be used to distinguish these 2 cases.&lt;br&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;V getOrDefault(k, V)&lt;/font&gt;: returns a default value if k does not exist.&lt;br&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;V put(k, V)&lt;/font&gt;: creates/replaces a mapping, returns null (if there was no mapping) or previous value associated with k.&lt;br&gt;-&amp;nbsp;&lt;font color=&quot;#cc00cc&quot;&gt;V computeIfAbsent(k, k -&amp;gt; V)&lt;/font&gt;: attempt to compute the value associated with the key if it is not already associated with one (or is mapped to null). The function returns null if no mapping is recorded, otherwise returns the existing or computed value associated with the key.&lt;br&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;V remove(k)&lt;/font&gt;: removes mapping for the key k, returns its value, or null if such mapping didn&#39;t exist. Note that that is no longer necessarily true if the map imp permits null values.&amp;nbsp;&lt;br&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;void clear()&lt;/font&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;boolean isEmpty()&lt;/font&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;-&lt;font color=&quot;#cc00cc&quot;&gt; int size()&lt;/font&gt;: returns number of mappings." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-33">
+          <mxGeometry y="39" width="384" height="282" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-35" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-33">
-          <mxGeometry y="256" width="384" height="8" as="geometry" />
+          <mxGeometry y="321" width="384" height="8" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-36" value="-&amp;nbsp;Since 1.2 (Dec 1998).&lt;br&gt;- A map cannot contain duplicate keys.&lt;br&gt;- Elements order: some impls guarantee (e.g. TreeMap), some don&#39;t (e.g. HashMap).&lt;br&gt;- Some impls have restrictions on the keys and values (e.g. null keys/values)." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-33">
-          <mxGeometry y="264" width="384" height="96" as="geometry" />
+          <mxGeometry y="329" width="384" height="96" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-37" value="&lt;b style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;HashMap&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="1646.38" y="741" width="357.25" height="233" as="geometry" />
+          <mxGeometry x="2024.38" y="741" width="357.25" height="233" as="geometry" />
         </mxCell>
         <mxCell id="FApFlZrMrufbnj_ad8FX-38" value="//" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-37">
           <mxGeometry y="26" width="357.25" height="27" as="geometry" />
@@ -196,8 +176,50 @@
         <mxCell id="FApFlZrMrufbnj_ad8FX-40" value="-&amp;nbsp;Since 1.2 (Dec 1998).&lt;br&gt;- Hash table based implementation of the Map interface.&lt;br&gt;- &lt;b&gt;&lt;font color=&quot;#ff0000&quot;&gt;Null value/key is allowed&lt;/font&gt;&lt;/b&gt;.&lt;br&gt;- No order guarantee, no order guarantee over time.&lt;br&gt;- Load factor = #(defined_)mappings / #buckets (capacity of hash table) measures how full a hash table is. 0.75 offers a good tradeoff between time and space costs.&lt;br&gt;- When number of actual mappings exceeds load factor * current capacity, hash table is rehashed.&lt;br&gt;- Rehashed = internal hash table is rebuilt, so that the new one has approximately twice the capacity of old one." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-37">
           <mxGeometry y="61" width="357.25" height="172" as="geometry" />
         </mxCell>
-        <mxCell id="FApFlZrMrufbnj_ad8FX-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="FApFlZrMrufbnj_ad8FX-6" target="xqsKgH8Ro8fH1hyzLg4l-58">
+        <mxCell id="FApFlZrMrufbnj_ad8FX-52" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="FApFlZrMrufbnj_ad8FX-46" target="xqsKgH8Ro8fH1hyzLg4l-45">
           <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-46" value="&lt;b style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;PriorityQueue&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=27;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1053" y="960" width="248" height="234" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-47" value="Constructors:&lt;br&gt;&lt;font color=&quot;#cc00cc&quot;&gt;PriorityQueue()&lt;br&gt;PriorityQueue(Comparator&amp;lt;? super E&amp;gt;)&lt;br&gt;PriorityQueue(Collection&amp;lt;? extends E&amp;gt;)&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-46">
+          <mxGeometry y="27" width="248" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-48" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-46">
+          <mxGeometry y="95" width="248" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-49" value="-&amp;nbsp;Since 1.5 (Sep 2004).&lt;br&gt;- &lt;b style=&quot;color: rgb(255, 0, 0);&quot;&gt;null is prohibited&lt;/b&gt;&lt;font color=&quot;#ff0000&quot;&gt;.&lt;/font&gt;&lt;br&gt;- An unbounded priority queue based on a priority heap.&lt;br&gt;- The head of this queue is the least element with respect to the specified ordering. Ties are broken arbitrarily.&lt;br&gt;- This implementation is not synchronized." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-46">
+          <mxGeometry y="103" width="248" height="131" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="FApFlZrMrufbnj_ad8FX-6" target="xqsKgH8Ro8fH1hyzLg4l-59">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="FApFlZrMrufbnj_ad8FX-53" target="xqsKgH8Ro8fH1hyzLg4l-48">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-53" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;«interface»&lt;br style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;&lt;/span&gt;&lt;b style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;Set&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=38;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1343" y="459" width="294" height="187" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-54" value="- &lt;font color=&quot;#cc00cc&quot;&gt;boolean contains(o)&lt;/font&gt;: returns true if this set contains an element e such that o == null ? e == null : o.equals(e).&lt;br&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;boolean remove(o)&lt;/font&gt;: removes the specified element if it is present" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-53">
+          <mxGeometry y="38" width="294" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-55" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-53">
+          <mxGeometry y="120" width="294" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-56" value="- Since 1.2 (Dec 1996).&lt;br&gt;- Some implementations may have restrictions on the elements they contain (e.g. null)." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-53">
+          <mxGeometry y="128" width="294" height="59" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-60" value="&lt;b style=&quot;border-color: var(--border-color);&quot;&gt;HashSet&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=27;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1387" y="825" width="206" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-61" value="//" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-60">
+          <mxGeometry y="27" width="206" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-62" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-60">
+          <mxGeometry y="53" width="206" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="FApFlZrMrufbnj_ad8FX-63" value="-&amp;nbsp;Since 1.2 (Dec 1998).&lt;br&gt;- A Set interface implementation, backed by a Hash table (actually a HashMap instance)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="FApFlZrMrufbnj_ad8FX-60">
+          <mxGeometry y="61" width="206" height="71" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
