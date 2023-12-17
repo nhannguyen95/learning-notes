@@ -52,13 +52,32 @@ Next we will discuss each TCP/IP layer.
 
 These layers grant the functionalities of hardware and allows its use to upper layers.
 
-**Physical** layer controls how data are put on the cable, it converts information in form of bits into electromagnetic signals (cables and wireless) or light pulses (fiber optic).
+#### Physical Layer
+
+**Physical** layer controls how data are put on the cable for transmission and reception between a device and a shared physical medium (physical medium can be Copper, Fibre, or WIFI), it converts information in form of bits into electromagnetic signals (cables and wireless) or light pulses (fiber optic) and vice versa. It makes sure that both devices shared the understanding of the physical medium (both can use this physical medium to send and receive the data).
+
+In order to connect multiple devices together, we can use a layer-1 networking device called Network Hub, a device which wants to join a network needs to connect to a Network Hub in that network.
+
+Note that Physical Layer is pretty dumb:
+- There are no individual device addressing, one device can't address traffic directly at another (device-to-device communication), data sent from 1 device is transmitted onto the physical medium and everything else receives it. It's a broadcast medium.
+- Only one device can transmit at once on a same Layer 1 shared medium, otherwise collision occurs. Physical Layer has no collision detection and no method of controlling which devices can transmit.
+- The more devices added to a Layer 1 network, the higher chance of collisions and data corruption.
+
+Data Link Layer (Layer 2) fixes these problems by adding a lot of intelligence on top of Layer 1.
+
+Learn more in:
+- [[07-physical-layer-signals-waves-and-transmission-types]]
+- [[08-physical-layer-copper-media-and-ethernet-cable]]
+- [[09-physical-layer-fiber-optic-media-data-as-light-pulses]]
+
+#### Data Link Layer
 
 **Data Link** layer defines which cable to use, how much data can be put on the cable at the same time, how it should be formatted and also *detects if something goes wrong during the transmission*. This layer is divided into 2 sub-layers: MAC (Media Access Control) which interfaces with Physical layer and LLC (Logical Link Control) which interfaces with Network layers.
 
+Learn more in [[12-data-link-layer]]
 ### Network and Transport layers
 
-These layers allow applications to talk to each other
+These layers allow applications to talk to each other.
 
 **Network** layer defines addressing information of the destination device and tells that to Data Link layer so that the Data Link layer can select the right cable to reach that device (This is possible because internet-wide addressing information is processed at this layer). Protocol used is **IP (Internet Protocol)**.
 

@@ -8,7 +8,7 @@ A **network topology** is the representation of links between the nodes within a
 
 3 types of transmission:
   - **Simple**: information can flow in a single direction (A to B, but not B to A).
-  - **Half Duplex**: information can flow in both direction, but not simultaneoulsy (if A is talking to B, B has to listen)
+  - **Half Duplex**: information can flow in both direction, but not simultaneously (if A is talking to B, B has to listen)
   - **Full Duplex** (the best one): information can flow in both direction simultaneously. We can obtain full duplex using a switch.
 
 ---
@@ -20,19 +20,19 @@ In this topology, nodes are connected together by the **same link**, for example
 Share Media topology:
   - is extremely easy to design.
   - everything a device "says" in a cable is heard from all other nodes => easy to communicate.
-  - Problem: communication cannot overlap, **only a single device can be talking** at a given tiem.
+  - Problem: communication cannot overlap, **only a single device can be talking** at a given time.
 
-Two major algorithms have been deleloped over the year to solve this problem:
+Two major algorithms have been developed over the year to solve this problem:
   - Carrier Sense Multiple Access (CSMA) - we use it today: each device can decides autonomously if they have to talk or not, the logic is that it listens for what is happening on the media and talk as soon as nobody is talking.
   - Token Ring (legacy): was originally developed for circular topologies. The logic is simple: nodes elect a master node to generate a token, nodes circulate this token arround and only the node currently has the token can talk.
  
 ## [Star Topology](https://www.ictshore.com/wp-content/uploads/2016/11/1011-08-Star_topology.png)
 
-Best pratice to be used in data centers (connecting servers).
+Best practice to be used in data centers (connecting servers).
 
 In this topology, all devices connect to a single device in the center (call it node A).
 
-Major benefit is **centralized management and control**: all the traffix passes through node A, we can apply policy to restrict some users to reach some other devices on the network, we can filter and inspect traffic to allow or deny some specific applications, and we can manage the overall infrastructure from the central point.
+Major benefit is **centralized management and control**: all the traffic passes through node A, we can apply policy to restrict some users to reach some other devices on the network, we can filter and inspect traffic to allow or deny some specific applications, and we can manage the overall infrastructure from the central point.
 
 Problem: if node A fails, all the other nodes will be disconnected and isolated
 

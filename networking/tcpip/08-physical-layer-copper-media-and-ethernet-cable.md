@@ -1,4 +1,7 @@
-Each device must have a port to insert the cable into, and that port is connected to a specific circuit that allow the device to communicate using that cable. That circuit is called **NIC (Network Interface Card - Card mạng)**, and its price vary based on the cable it has to control (copper-based, fiber-optic, wireless antenna and so on).
+Each device must have a port to insert the cable into, and that port is connected to a specific circuit that allow the device to communicate using that cable. That circuit is called **NIC (Network Interface Card - Card mạng)**, and its price vary based on the cable it has to control (copper-based, fiber-optic, wireless antenna and so on):
+- Copper-based: analog signals are electrical signals (electromagnetic signals).
+- Fiber-optic: analog signals are light.
+- WIFI: analog signals are radio frequencies (electromagnetic signals).
 
 ---
 

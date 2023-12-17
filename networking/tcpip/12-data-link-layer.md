@@ -2,8 +2,7 @@ The data link layer:
   - is the one that allow the communication between two contiguous nodes, that are nodes having access to a common media (connected together either directly or via a shared media)
   - allows the network layer to communicate seamlessly over an heterogeneous network.
   
-
-> The physical layer has no intelligence built-in, it’s just about transforming bits into signals and vice versa, without knowing what these bits actually mean
+> The physical layer has no intelligence built-in, it’s just about transforming bits into signals and vice versa, without knowing what these bits actually mean.
 
 Data link layer is implemented in NICs.
 
@@ -20,16 +19,20 @@ The data that is added at a layer in the sender will only be read at that layer 
 
 The application data plus all the extra information added by layers are called **Protocol Data Unit (PDU)**.
 
-The network layer PDU is called **Packet**, when it is passed down to the Data link layer, [it is "envoloped" in a **Frame**](https://www.ictshore.com/wp-content/uploads/2016/11/1012-06-MAC_from_to.png).
+The network layer PDU is called **Packet**, when it is passed down to the Data link layer, [it is "enveloped" in a **Frame**](https://www.ictshore.com/wp-content/uploads/2016/11/1012-06-MAC_from_to.png).
 
 ---
 
-In order to deliver data to the correct destination device, we have to know its address. At data link layer, we use **Layer 2 address**, that is MAC address assigned to any NIC.
+In order to deliver data to the correct destination device, we have to know its address (to be able to identify the device). Data Link Layer introduces **Layer 2 address**, that is MAC address assigned to any NIC.
+
+MAC addresses are 48-bit long in hex, e.g. `00:1b:63:84:45:e6`. A MAC address is formed of 2 parts:
+- OUI (Organizationally Unique Identifier): this is assigned to companies who manufacture network devices.
+- NIC (Network Interface Controller): together with OUI, each MAC address is globally unique.
 
 ---
 
-Frame's structure: 3 parts:
-  - Header: set of fields that are needed for the purpose of transmitting/receiving: MAC addresses, type/length field.
+Frame's structure:
+  - Header: set of fields that are needed for the purpose of transmitting/receiving: (source and destination) MAC addresses, type/length field.
   - Payload: content from upper layers.
   - FCS (Frame Checksum): a field that allows the receiver to check if the message was disrupted over the transmission.
 
@@ -41,17 +44,17 @@ Each switch implements a *dynamic* **MAC address table** that stores in the swit
   - if it doesn't know the receiver MAC address, it just sends the frame to all of connected devices and hopes to receive the response back from the receiver; it then associates the MAC address of that receiver to the port that connects to it.
   - If it knows the receiver MAC address, it just needs to forward the frame to the corresponding port.
   
-This feature of switches allows full-duplex transmission, because you can send and receive simultaniously since no collision happen anymore.
+This feature of switches allows full-duplex transmission, because you can send and receive simultaneously since no collision happen anymore.
 
 Another cool feature of modern switches is the **Virtual Local Area Networks (VLANs)**. Basically, you can configure a switch to group its ports in groups, traffic will spread only between ports inside the same group and not between different group.
 
 ---
 
-**unicast addresses** – represent a single LAN interface. A unicast frame will be sent to a specific device, not to a group of devices on the LAN.
+**unicast addresses** – represent a single LAN interface. A unicast frame will be sent to a specific device, not to a group of devices on the LAN (1 to 1).
 
-**multicast addresses** – represent a group of devices in a LAN. A frame sent to a multicast address will be forwarded to a group of devices on the LAN.
+**multicast addresses** – represent a group of devices in a LAN. A frame sent to a multicast address will be forwarded to a group of devices on the LAN (1 to many).
 
-**broadcast addresses** – represent all device on the LAN. Frames sent to a broadcast address will be delivered to all devices on the LAN.
+**broadcast addresses** – `ff:ff:ff:ff:ff:ff` represent all device on the LAN. Frames sent to a broadcast address will be delivered to all devices on the LAN (1 to all).
 
 
 
