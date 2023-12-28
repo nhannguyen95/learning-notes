@@ -1,7 +1,9 @@
 ---
-
 mindmap-plugin: basic
-
+tags:
+  - java
+  - lambda
+  - modern-java-in-action-2018
 ---
 
 # Lambda
@@ -40,8 +42,3 @@ mindmap-plugin: basic
    - (args) -> obj.instanceMethod(args) = obj::instanceMethod
 - Constructor references
    - Signature: (args) -> ClassName = ClassName::new (assume args is ClassName’s constructor’s params)
-
-## Tags
-- #java 
-- #lambda 
-- #modern-java-in-action-2018 

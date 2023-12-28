@@ -128,6 +128,9 @@ tags:
 	  for(String string : strings) {
 	  result += string;
 	  }
+	  
+	  ```
 
 	- This is worse since `String` objects are mutable, so in order to concat 2 strings, runtime has to create a new `String` object and copy the 2 strings over.
-	- Since Java 1.5, with the introduction of `StringBuilder`, the `result += string` is compiled to `result = new StringBuilder().append(result).append(string).toString()`. This is still worse than using one `StringBuilder` due to overhead of creating and operating on a new `StringBuilder` instance on every loop.
+	- Since Java 1.5, with the introduction of `StringBuilder`, the string concatenation operator (`+`) is implemented through the `StringBuilder` and its append method.
+	- This means the `result += string` is compiled to `result = new StringBuilder().append(result).append(string).toString()`. This is still worse than using one `StringBuilder` due to overhead of creating and operating on a new `StringBuilder` instance on every loop.

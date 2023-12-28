@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-12-27T10:29:20.303Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.11 Chrome/114.0.5735.289 Electron/25.9.8 Safari/537.36" etag="6T37APv9DhB2XHJJYGu5" version="22.1.11" type="device">
+<mxfile host="Electron" modified="2023-12-27T14:08:58.183Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.11 Chrome/114.0.5735.289 Electron/25.9.8 Safari/537.36" etag="u7KTMqxLcBVi_3wT0gqI" version="22.1.11" type="device">
   <diagram name="Page-1" id="rgzXXpZxuQ33LzNDmdkQ">
     <mxGraphModel dx="2968" dy="2085" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
       <root>
@@ -366,16 +366,16 @@
           <mxGeometry y="74" width="206" height="87" as="geometry" />
         </mxCell>
         <mxCell id="uIWywwVKDFgmFYhPDzQX-13" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;«interface»&lt;br style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;&lt;/span&gt;&lt;b style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;Iterable&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=39;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
-          <mxGeometry x="617" y="-174" width="251" height="155" as="geometry" />
+          <mxGeometry x="583.5" y="-268" width="318" height="253" as="geometry" />
         </mxCell>
         <mxCell id="uIWywwVKDFgmFYhPDzQX-14" value="- &lt;font color=&quot;#cc00cc&quot;&gt;void forEach(Consumer&amp;lt;? super T&amp;gt; action)&lt;/font&gt;&lt;br&gt;- &lt;font color=&quot;#cc00cc&quot;&gt;Iterator&amp;lt;T&amp;gt; iterator()&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="uIWywwVKDFgmFYhPDzQX-13">
-          <mxGeometry y="39" width="251" height="40" as="geometry" />
+          <mxGeometry y="39" width="318" height="40" as="geometry" />
         </mxCell>
         <mxCell id="uIWywwVKDFgmFYhPDzQX-15" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="uIWywwVKDFgmFYhPDzQX-13">
-          <mxGeometry y="79" width="251" height="8" as="geometry" />
+          <mxGeometry y="79" width="318" height="8" as="geometry" />
         </mxCell>
-        <mxCell id="uIWywwVKDFgmFYhPDzQX-16" value="-&amp;nbsp;Since 1.5 (Sep 2004).&lt;br&gt;- Implementing this interface allows an object to be the target of the for-each loop statement." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="uIWywwVKDFgmFYhPDzQX-13">
-          <mxGeometry y="87" width="251" height="68" as="geometry" />
+        <mxCell id="uIWywwVKDFgmFYhPDzQX-16" value="-&amp;nbsp;Since 1.5 (Sep 2004).&lt;br&gt;- This interface provides means for looping through a collection.&lt;br&gt;- Using an iterator: first we obtain an iterator on the collection by calling its iterator() method. Then using this iterator to access each element, one at a time.&lt;br&gt;- Using For-Each: Implementing this interface allows an object to be the target of the for-each loop statement. Pros: short and simple syntax. Cons: can only cycle through the collection in forward direction, can&#39;t modify contents of the collection." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="uIWywwVKDFgmFYhPDzQX-13">
+          <mxGeometry y="87" width="318" height="166" as="geometry" />
         </mxCell>
         <mxCell id="uIWywwVKDFgmFYhPDzQX-18" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;«interface»&lt;br style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;&lt;/span&gt;&lt;b style=&quot;border-color: var(--border-color); color: rgb(51, 51, 51);&quot;&gt;Comparable&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=39;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
           <mxGeometry x="1698" y="-229" width="459" height="416" as="geometry" />

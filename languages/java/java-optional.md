@@ -12,7 +12,7 @@ mindmap-plugin: basic
    - Inspired by Haskell and Scala
 - Why?
    - More elegant way (than `null`) to model the presence/absence of a value
-   - More readable API in which several ops are chained together (like in [[Stream]])
+   - More readable API in which several ops are chained together (like in [[java-stream]])
 - Usage
    - Creation
       - From an empty obj

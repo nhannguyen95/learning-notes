@@ -38,6 +38,8 @@ tags:
 		- Designed to hold Unicode characters.
 - Boolean
 	- `boolean`
+- Java primitives are not implemented as objects, but as normal variables in the interest of efficiency.
+- When primitives are passed to a function/method, they are passed by value.
 
 ## Type conversion
 - Automatic conversion
@@ -65,7 +67,7 @@ tags:
 		  MIN_VALUE
 		  MAX_VALUE
 		  
-		  // Number of bytes, bits used to represent this value.
+		  // Number of bytes, bits used to represent this value.
 		  BYTES
 		  SIZE
 		  
