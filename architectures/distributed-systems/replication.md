@@ -1,123 +1,259 @@
-## Replication
+---
 
-Replication means keeping a copy of the same data on multiple machines that are connected via a network.
+  
 
-Reasons for replication:
-- To keep data geographically close to your users (and thus reduce latency).
-- To allow the system to continue working even if some of its parts have failed (and thus increase availability).
-- To scale out the number of machines that can serve read queries (and thus increase read throughput).
+mindmap-plugin: basic
 
-All of the difficulty in replication lies in handling changes to replicated data.
+  
 
-## Leaders and Followers
+---
 
-Each node that stores a copy of the database is called a *replica*. With multiple replicas, every write to the database needs to be processed by every replica. The most common solution for this is called *leader-based replication*:
-- One of the replicas is designated the *leader* (master, primary): write requests are first sent to the leader.
-- The other replicas are known as *followers* (read replicas, slaves, secondaries, hot standbys): whenever the leader writes new data to its local storage, it also sends the data change to all of its followers as part of a *replication log* or *change stream*. Each follower applies all writes in the same order as they were processed on the leader.
-- From clients' point of view, they can read either the leader or any of the followers, writes are only accepted on the leader.
+# Replication
 
-This mode of replication is a built-in feature of many sysmtes:
-- Relational databases: PostgreSQL, MySQL, Oracle Data Guard, etc
-- Nonrelational databases: MongoDB, RethinkDB, and Espresso.
-- Distributed message brokers: Kafka and RabbitMQ highly available queues.
-- Network filesystems, replicated block devices (DRBD).
+## Introduction
+- Replication: keeping a copy of the same data on multiple machines (nodes) that are connected via a network
+- Each node that stores a copy of database called a *replica*
+- Purposes
+	- Keep data geographically close to your users (and thus reduce latency)
+	- Allow the system to continue working even if some of its parts have failed (and thus increase availability)
+	- Scale out the number of machines that can serve read queries (and thus increase read throughput)
+- All difficulties in replication lie in handling changes (writes) to replicated data
 
-The replication can happen sync or async. (In relational db, this is often a configurable option.):
-- Sync replication: advantage is that the follower is guaranteed to have an up-to-date copy of the data that is consistent with the leader. The disadvantage is that if the follower does not respond (due to being crashed, network fault, etc.), the write cannot be processed. The leader must block all writes and wait until the synchronous replica is available again.
-  Therefore, practically not all followers are sync. In practice, if sync replication is enabled on a db, it usually means that one of the followers is sync, and the others are async. If the sync follower becomes unavailable or slow, one of the async followers is made sync. This guarantees that you have an up-to-date copy of the data on at least 2 nodes. This configuration is sometimes called *semi-sync*.
-- Async replication: in a fully async replication config, if the leader fails, any writes that have not yet been replicated to followers are lost, this means a write is not guaranteed to be durable. However this config has the advantage that the leader can continue processing writes, even if all of its followers have fallen behind (this is called *replication lag*). Despite that disadvantage, async replication is widely used, especially if there are many followers or if they are geographically distributed.
-
-So there's an obvious trade-off: sync replication makes sure that data is not lost, while async replication offers better performance and availibility.
-
-## Setting up new followers
-
-From time to time you will need to set up new followers, question is how to ensure they have an accurate copy of the leader's data. Several options:
-- Simple copying data from the leader to the new followers. The problem is that clients are constantly writing to the db, thus the data is always in flux, so a standard copy would see different parts/versions of the db at different points in time.
-- Locking the db/leader while copying. This goes against our high availability goal.
-- No downtime process:
-  - Take a consistent snapshot of the leader (without locking the db).
-  - Copy the snapshot to new followers.
-  - The followers connect to the leader and request all the data changes that have happened since the snapshot was taken.
-  - When the follower has processed the backlog of data changes since the snapshot, we say it has caught up. It can now continue to process data changes from the leader as they happen.
-
-## Handling node outages
-
-The goal is to achieve high availability with leader-based replication: keep the system running despite individual node failures, and to keep the impact of a node outage as small as possible.
-
-**Follower failure: catch-up recovery**
-
-Each follower keeps a log of data changes it has received from the leader on its local disk. After issues such as crash or interrupted network, the follower can recover easity by knowing the last transaction that was processed before the fault occurred from the log and requesting all the data changes from the leader.
-
-**Leader failure: failover**
-
-When the leader fails, one of the followers needs to be promoted to be the new leader, clients need to be reconfigured to send their writes to the new leader, and the other followers need to start consuming data changes from the new leader. This process is called *failover*.
-
-An automatic failover process usually consists of the following steps:
-- Determining that the leader has failed: most systems use a timeout: if a node doesn't respond for some period of time (say 30 sec), it is assumed to be dead.
-- Choosing a new leader: best candidate is usually the replica with the most up-to-date data changes from the old leader (to minimize data loss).
-- Reconfiguring the system to use the new leader: clients send new write requests to the new leader. The old leader (after it comes back) becomes a follower and recognizes the new leader.
-
-Things that can go wrong:
-- If async rep is used, the new leader may not have received all the writes from the old leader before it failed. Most common solution is for the old leader's unreplicated writes to be discarded, which may violate clients' durability expectations.
-- Discarding writes is especially dangerous if other storage systems outside of the db need to be coordinated with the db contents. For example the new leader can reused some primary keys that were previously assigned by the old leader, which cause data inconsistency.
-- In some certain fault scenarios, 2 nodes could both believe that they are the leader (called *split brain*). This is dangerous, data is likely to be lost or corrupted if both leaders accept writes. Some systems have a mechanism to shut down one node if 2 leaders are detected, however we can end up with both nodes being shut down if it is not carefully designed.
-- Need to fine tune the timeout parameter: a long timeout means a longer time to recovery in case the leader fails, a short one could cause unnecessary failovers.
-
-There are no easy solutions to these problems, which are fundamental in distributed systems. Some operation teams prefer to perform failover manually
-
-## Replication Log
-
-Several different replication methods are used in practice.
-
-**Statement-based replication**
-
-Leaders log every write request (statement) that it executes and send that statement log to its followers. Problems:
-- Statements that contain nondeterministic functions (`NOW()`, `RAND()`) are likely to generate different value on each replica. Leader can replace them with fixed value before sending however there are just too many edge cases.
-- In some cases, statements must be executed in exactly the same order on each replica, or else they may have a different effect.
-- Statements that have side effects may result in different side effects occuring on each replica, unless the side effects are deterministic.
-
-Due to those problems, other replication methos are preferred.
-
-**Write-ahead log (WAL) shipping**
-
-All writes that the leader applied are logged to an append-only sequence of bytes. The leader then writes the log to disk and sends it across the network to its followers. When the follower process the log, it builds a copy of the exact same data structures as found on the leader.
-
-Disadvantages:
-- The log describes the data on a very low level (details of which bytes were changed in which disk blocks), this makes replication closely coupled to the storage engine.
-
-This method of replication is used in PostgreSQL, Oracle, etc.
-
-**Logical (row-based) log replication**
-
-An alternative is to use different log formats (logical log) for replication and for the storage engine (physical log), which allows the replication log to be decoupled from the storage engine internals.
-
-**Trigger-based replication**
-
-The above approaches are implemented by the database system. But sometimes you may want to have more flexibility and move replication up to the application layer.
-
-Features available in many relational databases that can make data changes available to an application by reading the db log: *triggers* and *stored procedures*. A trigger lets you register custome application code that is automatically executed when a data change occurs (write transaction).
-
-Disadvantage:
-- has greater overheads than other methods.
-- is more prone to bugs and limitations than built-in replication methods.
-
-However it can still be useful due to its flexibility.
-
-## Replication Lag
-
-Replication lag is the delay between a write happening on the leader and being reflected on a follower. Some problems that are likely to occur when there is replication lag:
-
-**Reading your own writes**
-
-When a user submits new data then views it shortly after, they may see the old data. This happens when the read request is handled by a replica and new data have not reached it yet.
-
-In this case, we need read-after-write (read-your-writes) consistency: users always see their up-to-date data submitted themselves. Some implementation:
-- When a user read something that the user may have modified, read it from the leader. For example, on a social network system, always read the user's own profile from the leader, and any other users' profiles from a follower.
-- If most things in the application are editable by the user, other criteria may be used to decide whether to read from the leader:
-  - Tracking the last update, read from the leader within 1 minute after that.
-  - Preventing queries on followers that is more than 1 minute behind the leader.
-- Ensure that the replica only serves reads for a user if it reflects updates at least until the user's most recent write's timestamp. If it does not, either the read can be handled by another replica or the query can wait until the replica has caught up.
-- If replicas are distributed across multiple datacenters, any request that needs to be served by the leader must be routed to the datacenter that contains the leader.
-
-Another problem: users enter some data on one device then view it on another device. In this case we need cross-device read-after-write consistency. Addtional issues to consider:
-- Timestamp on users' last update become more difficult, since the code running on one device doesn't know what updates have happened on the other device. This metadata will need to be centralized.
+## Replication paradigms
+- **Leader-based**
+	- Leaders and Followers
+		- *leader*
+			- Also known as master, primary
+			- Where clients send write requests to
+			- New data is written to its local storage
+		- *follower*
+			- Also known as read replica, slave, secondary, hot standby
+			- Where leader sends data changes to (after writing new data to its local storage)
+			- Data changes are sent as *replication log* or *change stream*, and are applied in the same order processed on leader
+			- Setting up a new follower
+				- Why?
+					- Increase followers
+					- Replace failed nodes
+				- Can be done without downtime
+					- Take a leader's snapshot (without locking writes)
+					- Copy snapshot to new follower node
+					- Follower connects to leader, requests data change since snapshot creation
+						- This requires snapshot is associated with a position in leader's replication log
+						- PostgreSQL's *log sequence number* , MySQL's *binlog coordinates*
+				- This process is fully automated or manual, depending on db
+		- Clients send writes to leader, reads to all
+	- Built-in features of many softwares
+		- Relational DB: PostgreSQL (9.0+), MySQL, Oracle Data Guard, SQL Server
+		- Nonrelational DB: MongoDB, RethinkDB, Expresso
+		- Distributed message brokers: Kafka, RabbitMQ
+	- Replication modes
+		- Sync
+			- Leader forwards changes to followers synchronously
+			- Leader waits for responses from followers before notifying clients
+			- Pros
+				- Followers guaranteed to have up-to-date data with leader
+			- Cons
+				- Writes can't be processed if followers don't response
+		- Async
+			- Leader forwards changes to followers asynchronously
+			- Leader do not wait for responses from followers
+			- Pros
+				- Performance: fast response time
+				- Availability: leader can continue serving requests when followers fail
+			- Cons
+				- Writes might be lost
+			- Despite cons, is still widely used if
+				- Many followers
+				- They are geographically distributed
+		- Semi-sync
+			- In practice, 1 follower is sync, others are async
+			- If the sync node is slow/unavailable, another one is made sync
+			- Guarantees to have up-to-date data on at least 2 nodes
+	- Replication implementations
+		- **Statement-based replication**
+			- Leader logs every write statements it executes to followers
+			- Problems
+				- Statements might contain nondeterministic function (e.g. `NOW()`, `RAND()`)
+					- Workaround: replace those functions with fixed value
+					- But there are simply too many edge cases
+				- Statements might produce different side effects on each replica
+				- In some cases, statements must be executed in exactly the same order on each replica, or else they may have a different effect
+			- Used in MySQL in 5.1-, VoltDB
+		- **Write-ahead log (WAL) shipping**
+			- All writes leader applied are logged to an append-only sequence of bytes
+			- Leader writes the log to disk and sends it across the network to followers
+			- When followers process the log, it builds a copy of exact same data structures as on the leader
+			- Problems
+				- The log describes the data on a very low level (byte-level on disk blocks)
+					- This makes replication closely coupled to the storage engine
+			- Used in PostgreSQL, Oracle
+		- **Logical (row-based) log replication**
+			- Similar to WAL, but use logical log instead
+			- This allows the log to be decoupled from storage engine
+		- **Trigger-based replication**
+			- A replication approach that involves application code
+			- Relational DB features such as triggers, stored procedures allow registering of custom code that automatically executed when there's a data change in DB
+			- The trigger code can log the change to another table, which can be used to replicate data change to another system (followers)
+			- Pros
+				- More flexible, e.g. if you want to replicate only a subset of data
+			- Cons
+				- More overheads, more prone to bugs and limitations than DB's built-in replication
+	- Handling node outages
+		- Goals
+			- Keep whole system running
+			- Minimize node outage impact
+		- Follower failure
+			- Technique: *catch-up recovery*
+				- Each follower has a log of data changes received from leader
+				- From the log, obtain the last transaction processed before outage
+				- (Re)connect follower to leader and request data changes since last transaction
+		- Leader failure
+			- Technique: *failover*
+				- Automatic
+					- Steps
+						- Determine leader has failed
+							- Use a timeout
+						- Promote a follower to be new leader
+						- Reconfigure system to use new leader
+							- Clients to write to new leader
+							- Other followers to consume changes from new leader
+							- Old leader recognizes new one when it comes back later
+								- Otherwise, *split brain* happens: 2 leaders under single-leader configs
+					- Risks
+						- Determine the right timeout threshold
+							- Long timeout: longer time to recovery in case leader fails
+							- Short timeout: unnecessary failovers might happen
+						- Old leader comes back with writes that had not been replicated
+				- Manual
+					- No easy solutions to automatic failover's risks (they are fundamental problems in distributed systems)
+					- So, some teams prefer manual failver
+	- Replication Lag
+		- *Replication lag*: the delay between a write happening on leader and being reflected on follower
+		- Commonly surfaced in an eventually consistent system (async followers)
+		- Replication lag might cause bad UX, thus system might need to be designed to have stronger guarantee
+		- For leader-based replication, DBs typically expose replication lag metrics, so you can feed into monitoring system and investigate when the lag is large
+		- Problems with large replication lag
+			- Problem 1
+				- When a user reads a data they just submitted (wrote), they might not see it
+				- Solution
+					- Need *read-your-writes consistency* (no guarantee about other users)
+						- When user shortly read something that they just modified, read from leader
+							- E.g. on social network system, always read user's own profile from leader, others from followers
+						- If most things in the application are editable by users, other criteria may be used to decide whether to read from the leader
+							- Tracking the last update, read from the leader within 1 minute after that
+							- Preventing queries on followers that is more than 1 minute behind the leader
+						- Ensure only replicas which reflected user's most recent write serve user' reads
+							- If it does not, reads can be handled by another replica or in can wait until replica has caught up
+						- If replicas are distributed across multiple datacenters, any request that needs to be served by the leader must be routed to the datacenter that contains the leader
+					- When users access service from multiple devices
+						- Need to provide cross-device read-your-writes consistency
+							- User writes on one device, reads it on another one
+						- In this case, the timestamp of user's last write (update) need to be centralized in timestamp-based implementations
+						- Might need to route requests from all user's devices to same leader (data center)
+			- Problem 2
+				- User sees new data from a little lag follower, then old version of same data from a greater lag one
+				- Solution
+					- *Monotonic reads*
+						- User won't see older data after having previously read newer data
+						- How to implement
+							- Make sure each user always read from same replica
+							- The replica can be chosen based on a hash of user ID, rather than randomly
+							- If that replica fails, need to route user queries to another one
+			- Problem 3
+				- Users do not see (read) updates in the same order that they were written
+				- Solution
+					- *Consistent prefix reads*
+			- Implement those solutions in application code is complex and error-prone
+				- DBs now support *transactions* to provide stronger guarantees so devs don't have to worry about subtle replication issues
+	- Multi-leader
+		- Problem: leader in single-leader replication is SPOF for writes
+		- Use cases for multi-leader replication
+			- Multi-datacenter operation
+				- One leader in each data center
+				- Within each data center, single-leader replication is used
+				- Cons
+					- Write conflicts between leaders must be resolved
+				- Supported DBs
+					- MySQL with Tungsten Replicator
+					- PostgreSQL with BDR
+					- Oracle with GoldenGate
+			- Clients with offline operation
+				- Local DB (acts as a leader) allows applications continue to work offline
+				- CouchDB is designed for this mode of operation
+			- Real-time collaborative editing
+				- Similar to the above use case (local replica)
+		- Problems
+			- Write conflicts
+				- Leader 1 writes A to B, leader 2 writes A to C; when the changes replicated asynchronously, conflict occurs
+					- Leader 1 can't change from A to C since it's now B
+					- Leader 2 can't change from A to B since it's now C
+				- Single-leader don't have this
+				- Conflict resolutions
+					- Making writes synchronously
+						- Wait for a write to be replicated to all replicas before returning to user
+						- Cons
+							- Lose the advantage of multi-leader: each leader accept writes independently
+					- Avoiding conflicts
+						- Make sure all writes for a particular record go to same leader
+						- Break down when changing designated leader for a record
+					- Consistent state convergence
+						- Give each write a unique ID, pick the write with highest ID as winner
+							- If timestamp is used, this is called *last write wins*
+							- Popular, but prone to data loss
+						- Give each leader a unique ID, let writes originated at a higher ID replica win
+							- Also prone to data loss
+						- Merge conflicted values together
+						- Record conflicts in an data structure that preserves all information, write application code later to resolve conflicts (e.g. by prompting the user)
+							- Most multi-leader replication tools let you write conflict resolution logic using application code
+								- Executed on write
+								- Executed on read
+									- When a conflict is detected, all writes are stored
+									- On read, multiple versions of data are returned to application
+									- Application may prompt user to resolve the conflict, then write back to db
+									- CouchDB works this way
+					- Automatic
+						- Implementations are still young
+		- Topologies (for more than 2 leaders)
+			- All to all
+			- Circular
+				- Supported by default by MySQL
+			- Star
+- **Leaderless**
+	- Any (or some, depending on implementations) replica can accept writes
+	- DBs with leaderless architecture
+		- ==DynamoDB==, Riak, Cassandra, Voldermort
+	- Quorum consistency
+		- Leaderless system can continue to process writes when some nodes are down without a failover
+		- It does this by writing to and reading from all n nodes
+			- On write, the updated record is assigned a version number
+			- On read, record data is sent together with the version number to help determine newer value
+		- If
+			- When a write sent to all nodes, we wait for the write to be confirmed by w nodes
+			- When a read sent to all nodes, we wait for the read to query r nodes
+			- As long as w + r > n, there's at least 1 up-to-date value on read
+				- If w < n, we can still process writes if a node is unavailable
+				- If r < n, we can still process reads if a node is unavailable
+			- *Quorum reads/writes*: reads/writes that obey r and w values
+		- In Dynamo-style DBs; n, w, r are typically configurable
+			- w + r > n is not the only configuration
+			- You can do w + r <= n
+				- Pros
+					- Lower latency and higher availability (can tolerate more node failures)
+				- Cons
+					- More likely to read stale values
+		- In practice, w + r > n does not guarantee stale values are not returned
+			- Why?
+				- When there's a write conflict and writes are lost due to conflict resolution algorithm
+				- When the write happens concurrently with the read
+				- When the write/read was reported as failed (failed to reach quorum), 2 options
+					- Returning errors
+					- *Sloppy quorum*
+						- Borrow nodes from outside of n designated nodes, so requests can still obey quorum
+						- *Hinted handoff*: when unavailable nodes are fixed, writes are sent back from borrowed nodes
+						- Useful for increasing availability, but there might be stale values even w + r > n
+						- Sloppy quorum is optional in DynamoDB, enabled by default in Riak, disable by default in Cassandra, Voldemort
+			- This means w,r allow you to adjust the probability of stale values being read
+			- ==That's why Dynamo-style DBs are generally optimized for use cases that tolerate eventual consistency==
+			- Stronger guarantees generally require transactions or consensus
+	- Write conflicts
+		- TODO
