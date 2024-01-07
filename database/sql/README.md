@@ -1,0 +1,2 @@
+- [SQL](https://github.com/nhannguyen95/sql-in-10-mins-4th-edition)
+- [Book: Database System Concepts 6th Edition](https://www.amazon.com/Database-Concepts-Abraham-Silberschatz-Professor/dp/0073523321)
