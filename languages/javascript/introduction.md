@@ -1,3 +1,11 @@
+---
+tags:
+  - babel
+  - webpack
+  - javascript
+  - ECMAScript
+  - esbuild
+---
 ## JavaScript origin
 
 Oracle owns the official trademark for the name "JavaScript", this trademark is almost never enforced.
@@ -23,8 +31,8 @@ There are some JS APIs exist in this environment but not in others (for example 
 JS offers backward, but not forward compatibility. 
 
 Two mechanisms to support forward compatibility are:
-- Transpiling (most popular tool is Babel): convert source code from one form to another. This solves forward-compatibility problems related to syntax.
-- Polyfill: the pattern of providing a definition of a new API for an older environment that does not support it. Transpilers like Babel detects which polyfills your code needs and provide them automatically for you.
+- Transpiling (most popular tool is [[babel]]): convert source code from one form to another. This solves forward-compatibility problems related to syntax.
+- Polyfill: the pattern of providing a definition of a new API for an older environment that does not support it. Transpilers like [[babel]] detects which polyfills your code needs and provide them automatically for you.
 
 ---
 
@@ -40,7 +48,7 @@ JS source is a parsed language, then go through a "compilation" phase to produce
 
 ## JS program's flow
 2 phase processing (parsing/compilation -> execution):
-- The source gets transpiled (e.g. by Babel), then packed by Webpack, then it gets delivered to a JS engine.
+- The source gets transpiled (e.g. by [[babel]]), then packed by a module bundler (e.g. Webpack, [[esbuild]]), then it gets delivered to a JS engine.
 - JS engine parses the code to an Abstract Syntax Tree.
 - JS engine converts/"compiles" the AST to kind-of byte code (a binary intermediate representation).
 - The byte code is refined/converted further by the optimizing Just-In-Time compiler.

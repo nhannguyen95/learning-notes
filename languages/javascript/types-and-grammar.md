@@ -40,7 +40,7 @@ These natives are actually built-in functions.
 
 The result of the constructor form of value creation (`new String("abc")`) is an object wrapper around the primitive (`"abc"`) value.
 
-## Internall `[[Class]]`
+## Internal `[[Class]]`
 
 Values that are `typeof` of `"object"` (such as an array) are additionally tagged with an internal `[[Class]]` property (think of this more as an internal classification rather than related to classes from traditional OOP). This property cannot be accessed directly, but can generally be revealed indirectly by using `Object.prototype.toString(...)` method:
 ```js
@@ -58,7 +58,7 @@ a.length;  // 3
 a.toUpperCase();  // "ABC"
 ```
 
-Browsers long ago performance-optimized the common cases like these, so in general there's basically no reason to use the object form directly. It's better to just let the boxing happen implicitly where neccessary. In other words, never do things like `new String("abc")` or `new Number(42)`.
+Browsers long ago performance-optimized the common cases like these, so in general there's basically no reason to use the object form directly. It's better to just let the boxing happen implicitly where necessary. In other words, never do things like `new String("abc")` or `new Number(42)`.
 
 The `valueOf` method is to unbox an object wrapper to get the underlying primitive value out:
 ```js

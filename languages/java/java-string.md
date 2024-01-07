@@ -72,6 +72,7 @@ tags:
 	- Searching
 		- `int indexOf(String str)`
 			- Search for first occ
+		- `int indexOf(String str, int startIndex)`
 		- `int lastIndexOf(String str)`
 			- Search for last occ
 	- Modification
@@ -87,7 +88,7 @@ tags:
 			- `String toLowerCase()`
 			- `String toUpperCase()`
 			- `static String join(CharSequence delim, CharSequence ...strs)`
-			- `String split(String regexp)`
+			- `String[] split(String regexp)`
 	- Creating strings
 		- Using constructors
 			- `String()`
