@@ -68,7 +68,7 @@ The task definition is like a blueprint for your application and specifies vario
 - IAM role that your tasks use.
 - etc.
 
-The parameters that you use depend on the launch type you choose for the task. To ensure task definitions validate for use with a specific launc type, you can specify the `requiresCompatibilities` flag when registering task definitions.
+The parameters that you use depend on the launch type you choose for the task. To ensure task definitions validate for use with a specific launch type, you can specify the `requiresCompatibilities` flag when registering task definitions.
 
 For a definitive list of task definition parameters, see [here](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html).
 
@@ -80,7 +80,7 @@ It is recommended by AWS to deploy multiple containers into the same task defini
 - Containers are required to share resources.
 - Containers share data volumes.
 
-If these conditions aren't required, it is recommended to span your application across multiple task definitions by combining related containers into their own task definitions, each representing a single component, so you can scale, provision and deprovision them separately. As an example, you can group your frontend service container and a log steaming container into 1 task definition, and backend service container into another one.
+If these conditions aren't required, it is recommended to span your application across multiple task definitions by combining related containers into their own task definitions, each representing a single component, so you can scale, provision and deprovision them separately. As an example, you can group your frontend service container and a log streaming container into 1 task definition, and backend service container into another one.
 
 See [here](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/example_task_definitions.html) for a list of task definition examples.
 

@@ -1,6 +1,6 @@
 ## Scope
 
-Scope is (usually, see below) determined as compile time and is not actually created until runtime. In non-strict mode it can be also modified at runtime by using `eval` and `with`, this is bad practice and should be avoided:
+Scope is (usually, see below) determined at compile time and is not actually created until runtime. In non-strict mode it can be also modified at runtime by using `eval` and `with`, this is bad practice and should be avoided:
 
 ```js
 // By using eval:
@@ -15,7 +15,7 @@ badIdea();
 // scopeObj is turned into a scope at runtime.
 var scopeObj = { str: "abc" };
 with (scopeObj) {
-    console.log(abc);
+    console.log(str);
 }
 ```
 
@@ -95,7 +95,7 @@ JS is full of strange scoping behaviors for backward-compatibility reason. To av
 ## Global scope
 
 In addition to accounting for how different modules/pieces of code are able to access other pieces to cooperate, the global scope is also where:
-- JS exposes its built-ins: primitive types, natives (`Date()`, `Object()`, etc.), global funcitons (`parseInt()`), namespaces (`Math`, `JSON`), friends of JS (`WebAssembly`).
+- JS exposes its built-ins: primitive types, natives (`Date()`, `Object()`, etc.), global functions (`parseInt()`), namespaces (`Math`, `JSON`), friends of JS (`WebAssembly`).
 - The environment hosting the JS engine exposes its own built-ins: `console`, the DOM (`window`, `document`, etc.) timers (`setTimeout`), web platform APIs (`natigator`, `history`, `WebRTC`, etc.).
 
 Different JS environments handle scopes, especially global scope differently. A program may or may not:
@@ -109,9 +109,9 @@ As of ES2020, JS has finally defined a standardized reference to the global scop
 
 ## Hoisting
 
-`Hoisting` is the most commonly used term for a variable (**identifier**) being visible from the begining of its enclosing/function scope, even though its declaration may appear further down in the scope.
+`Hoisting` is the most commonly used term for a variable (**identifier**) being visible from the beginning of its enclosing/function scope, even though its declaration may appear further down in the scope.
 
-`function` hoisting and `var`-flavored variable hoisting attach their name identifiers to the nearest enlosing **function scope** (or global scope), this is called function-scoped. While `let` and `const` hoisting attach to their **enclosing block scope**, this is called block-scoped.
+`function` hoisting and `var`-flavored variable hoisting attach their name identifiers to the nearest enclosing **function scope** (or global scope), this is called function-scoped. While `let` and `const` hoisting attach to their **enclosing block scope**, this is called block-scoped.
 
 With formal `function` declaration, beside the function identifier, the assignment value (initialization) is also hoisted. This is not true for `function` expression assignments:
 
@@ -129,7 +129,8 @@ greeting2();    // OK (greeting2 is hoisted and initialized to
 var greeting = function greeting() {};
 function greeting2() {};
 ```
-`let/const` declarations do not automaically initialize at the begining of the scope, the way `var` declaration do. The period of time from the entering of a scope to where the auto-initialization of the variable occurs is called **Temporal Dead Zone (TDZ)**. The TDZ is the time window where a variable exists but it still uninitialized, and therefore cannot be accessed in any way:
+
+`let/const` declarations do not automatically initialize at the beginning of the scope, the way `var` declaration do. The period of time from the entering of a scope to where the auto-initialization of the variable occurs is called **Temporal Dead Zone (TDZ)**. The TDZ is the time window where a variable exists but it still uninitialized, and therefore cannot be accessed in any way:
 
 ```js
 
@@ -225,7 +226,7 @@ function say(myName) {
     // myName and greeting.
     output();
 
-    function output() { // use myname and hello }
+    function output() { /* use myname and hello */ }
 }
 
 // 2

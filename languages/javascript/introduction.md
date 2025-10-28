@@ -54,7 +54,7 @@ JS source is a parsed language, then go through a "compilation" phase to produce
 - The byte code is refined/converted further by the optimizing Just-In-Time compiler.
 - JS virtual machine executes the program.
 
-Note: JS engines don't have the luxury of an abundance of time to perform their work and optimizations because JS compilation does not happen in a build step ahead of time (as with other compiled languages). It usually must happen in mere microseconds right before the code gets executed. To ensure the fastest performance under these constraints, JS engines use all kinds of trics (like JITs, which lazy compile and even hot recompile).
+Note: JS engines don't have the luxury of an abundance of time to perform their work and optimizations because JS compilation does not happen in a build step ahead of time (as with other compiled languages). It usually must happen in mere microseconds right before the code gets executed. To ensure the fastest performance under these constraints, JS engines use all kinds of tricks (like JITs, which lazy compile and even hot recompile).
 
 ---
 

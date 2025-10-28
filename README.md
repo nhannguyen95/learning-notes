@@ -1,3 +1,50 @@
+## Unnamed
+
+### A
+- [Apex Domain]()(/networking/tcpip/14-network-layer-ipv4-subnetting.md)
+
+### C
+- [CIDR](/networking/tcpip/14-network-layer-ipv4-subnetting.md)
+
+### D
+
+- [DHPC](/networking/tcpip/20-protocols-for-the-network.md)
+- [DNS](/networking/tcpip//20-protocols-for-the-network.md)
+- [DNS Zone](/networking/tcpip//20-protocols-for-the-network.md)
+- [Domain-Driven Design (DDD)](/software-design/domain-driven-design/README.md)
+- [Domain Registrar](/networking/tcpip//20-protocols-for-the-network.md)
+
+### F
+- [FQDN](/networking/tcpip/20-protocols-for-the-network.md)
+
+### G
+- [Gherkin language]()
+
+### N
+- [Name Server](/networking/tcpip//20-protocols-for-the-network.md)
+- [Network Address Translation (NAT)](/networking/http/11-client-identification-and-cookies.md)
+- [Network Interface](/networking/tcpip/08-physical-layer-copper-media-and-ethernet-cable.md)
+
+### P
+- [Page drift](/system-design/api.md#page-drift-problem)
+- [Private IP Addresses](/networking/tcpip/14-network-layer-ipv4-subnetting.md)
+- [Public IP Addresses](/networking/tcpip/14-network-layer-ipv4-subnetting.md)
+
+### R
+- [Resource Record](/networking/tcpip/14-network-layer-ipv4-subnetting.md)
+- [Route53](/cloud/aws/route-53.md)
+
+### S
+- [Subnetting](/networking/tcpip/14-network-layer-ipv4-subnetting.md)
+
+### T
+- [Top Level Domain (TLD)](/networking/tcpip//20-protocols-for-the-network.md)
+
+### Z
+- [Zone Apex](/networking/tcpip//20-protocols-for-the-network.md#apex-domain-zone-apex)
+- [Zone File](/networking/tcpip//20-protocols-for-the-network.md)
+
+
 ## Terms
 - [Reliability, Scalability and Maintainability](./Chapter%201%3A%20Reliable%2C%20Scalable%2C%20and%20Maintainable%20Applications.md)
 - Head-of-line blocking.
@@ -30,12 +77,12 @@
 
 ## Technologies
 - Application-level technologies: Redis, Memcached.
-- Apache Kafka
+- Distributed message brokers: Apache Kafka, RabbitMQ.
 - ElasticSearch
 - Solr
 - Hadoop
 - Hibernate: Java ORM.
-- Relational databases: PostgreSQL.
+- Relational databases: PostgreSQL, MySQL, Oracle Data Guard, SQL Server.
 - Document-oriented databases: MongoDB, RethinkDB, CouchDB, Expresso.
 - Property graph model: Neo4j, Titan, InfiniteGraph.
 - Triple-store model: Datomic, AllegroGraph.
@@ -58,6 +105,9 @@
 - Build automation tools: Bazel, Maven, Gradle.
 - Websocket.
 - WebRTC.
+- IoC tooling: CloudFormation, Terraform, Chef and Puppet.
+- SMS service: Twilio, Nexmo.
+- Email service: Sendgrid, Mailchimp
 
 ## Tools
 - https://github.com/Netflix/chaosmonkey

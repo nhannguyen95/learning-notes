@@ -1,5 +1,5 @@
 ## Design Patterns
-- **Creational Patterns** involves object instantiation and all provide a way to decouple a client from the objects it needs to instantiate.
+- **Creational Patterns** involve object instantiation and provide a way to decouple a client from the objects it needs to instantiate.
   - [Simple Factory](simple-factory.md)
   - [Factory Method](factory-method.md)
   - [Abstract Factory](abstract-factory.md)

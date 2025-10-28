@@ -39,14 +39,6 @@ tags:
 - Boolean
 	- `boolean`
 
-## Type conversion
-- Automatic conversion
-	- Happens when
-		- 2 types are compatible
-		- Destination type is larger than source type.
-- Casting incompatible types
-	- Syntax: (target-type) value.
-
 ## Arrays
 - Default value of arrays when created with `new`
 	- 0 for numeric types.

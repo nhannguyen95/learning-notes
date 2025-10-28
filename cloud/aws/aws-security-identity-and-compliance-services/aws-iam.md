@@ -39,7 +39,7 @@ tags:
 				- Federated User authenticated by an external identity provider compatible with SAML 2.0, or OpenID Connect, or a custom-built identity broker.
 		- Use cases
 			- Giving AWS access to an unknown number or multiple things.
-				- Federated user access
+				- E.g. federated users access
 			- Giving temporary AWS access to IAM users.
 			- Cross-AWS account access.
 			- Cross-service access.
@@ -51,10 +51,22 @@ tags:
 				- Control what the role (or, the principal that assumed the role) is allowed to do.
 		- Role types
 			- Service role
-				- An IAM role that a service assumes to perform actions on your behalf.
+				- IAM roles assumed by AWS services to perform actions on your behalf
 				- Types
 					- Service role for an EC2 instance
+						- A special type of service role assumed by an application running an EC2 instance to perform actions in your account
+						- The role will be assigned to the instance on launched
+						- Applications running on the instance can retrieve temporary security credentials and perform actions the role allows (by including the credentials in the API requests)
+						- Note that you could also authenticate/authorize applications on the instance by creating an IAM user with access key then store the key directly on the instance. But doing so is a hassle, especially if you want to rotate the keys regularly.
 					- Service-linked role
+						- A special type of service role that linked to an AWS service
+							- It is owned/tied to the service
+							- Its permissions are predefined by the service
+						- The service can assume the role to perform actions on your behalf
+						- Creation
+							- A service might automatically create or delete the role
+							- It might allow you to CUD the role as part of its setup process
+							- It might require that you use IAM to create or delete the role
 	- **IAM group**
 		- A collection of IAM users.
 		- IAM groups have NO credentials on their own, you CAN'T login to IAM groups.
@@ -106,7 +118,7 @@ tags:
 					- **AWS managed policy**
 					- **Customer managed policy**
 			- **Incline policy**
-				- Policy directly aded to a single IAM Identity.
+				- Policy directly aded to a single IAM Identity.
 				- It is directly embedded into the identity and maintains a strict 1-to-1 relationship with it.
 	- **Resource-based policies**
 		- Inline attached to resources to grant permissions to the principal specified in the policy.
@@ -146,7 +158,25 @@ tags:
 - IAM is globally resilience
 	- Means it can cope with failure of a large section of AWS infrastructure.
 
-## AWS Security Token Service (STS)
+## **AWS Security Token Service (STS)**
+- Introduction
+	- STS is used to create and provide authenticated/trusted principals with ==temporary security credentials==
+	- That temporary security credentials can be used to control access to AWS resources
+	- Temporary security credentials
+		- Work almost identically to long-term access key credentials, except:
+		- They are short-term, can be configured to last anywhere from few mins to several hours
+		- They are not stored with the user, but generated dynamically and provided to user on requested
+		- Advantages (over long-term credentials)
+			- Avoid the hassle of distributing/embedding long-term credential with applications
+- How it works
+	- Scenario: a principal wants to assume a role
+	- The principal calls STS's AssumeRole API (`sts:AssumeRole`)
+		- The principal is either allowed or denied to assume the role based on the role's Trust Policy
+	- If the principal is allowed, STS reads the role's Permission Policy to generate temporary credentials
+		- Temporary credentials = f(args) | args contain Permission Policy
+	- The credentials are returned back to the principal
+	- The principal uses the credentials to authorize their requests to AWS services
+	- When the credentials expired, another AssumeRole call is needed to get new credentials
 
 ## **5. Federation**
 - (The creation of) a trust relationship between AWS and an external identity provider.
@@ -198,3 +228,5 @@ tags:
 		- IP address, user agent, SSL enabled status, timestamp, etc.
 	- **Resource data**
 		- Data related to the resource being requested (DynamoDB table name, EC2 instance tag, etc.)
+
+## **AWS Organizations**

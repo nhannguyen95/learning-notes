@@ -10,5 +10,5 @@
 <img src="./pics/abstract-factory-example.png" />
 
 ## Compare to Factory Method
-- Factory Method is a natural way to implement your product methods in your abstract factories: each method is declared abstract (`createDough`, `createSauce`, etc.) and the subclasses override it to create some object - that's Factory Method.
+- Abstract Factory is a natural way to implement your product methods in your abstract factories: each method is declared abstract (`createDough`, `createSauce`, etc.) and the subclasses override it to create some object - that's Factory Method.
 - Factory Method usually implement code in the abstract creator that makes use of the concrete types of the subclasses crete (code in `orderPizza` use pizza from the abstract `createPizza` method).

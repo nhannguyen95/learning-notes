@@ -95,6 +95,8 @@ Important notes:
 
 **301 Moved Permanently**: Used when the requested URL has been moved. The response should contain in the Location header the URL where the resource now resides.
 
+**302 Moved Temporarily**.
+
 **304 Not Modified**: If a client makes a conditional request, such as a GET if the resource has not been changed recently, this code is used to indicate that the resource has not changed. (For example there maybe a If-Modified-Since header in the Headers of request message).
 
 **305 Use Proxy**: Used to indicate that the resource must be accessed through a proxy; the location of the proxy is given in the Location header.
@@ -108,6 +110,8 @@ Important notes:
 **404 Not Found**.
 
 **405 Method Not Allowed**: The Allow header should be included in the response to tell the client what methods are allowed on the requested resource.
+
+**429 Too Many Requests**
 
 **500 Internal Server Error**
 

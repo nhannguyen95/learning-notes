@@ -50,7 +50,7 @@ Object.prototype.toString.call([1, 2, 3]);
 
 ## Boxing Wrappers
 
-These object wrappers are very important, it provides access to properties and methods for wrapped primitive. Thanksfully JS automatically wraps (boxes) primitive values to fulfill such access:
+These object wrappers are very important, it provides access to properties and methods for wrapped primitive. Thankfully JS automatically wraps (boxes) primitive values to fulfill such access:
 ```js
 var a = "abc";
 
@@ -196,7 +196,7 @@ There are also several different ways to convert a Date to a number as mentioned
 
 #### Parsing Numeric Strings
 
-Unlike corercion, parsing a numeric value out of a string is tolerant of non-numeric characters:
+Unlike coercion, parsing a numeric value out of a string is tolerant of non-numeric characters:
 ```js
 var a = "42px";
 

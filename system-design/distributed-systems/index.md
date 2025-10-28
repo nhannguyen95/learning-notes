@@ -1,0 +1,11 @@
+Goal/problems: technique:
+- Ability to store big data: consistent hashing to spread the load across servers.
+- Highly availability reads: [[replication]], multi-data center setup.
+- Highly availability writes: versioning and conflict resolution with vector clocks.
+- Dataset partition: consistent hashing.
+- Incremental scalability: consistent hashing.
+- Heterogeneity: consistent hashing.
+- Tunable consistency: quorum consensus.
+- Handling temporary failures: sloppy quorum and hinted handoff.
+- Handling permanent failures: Merkle tree.
+- Handling data center outage: cross-data center replication.

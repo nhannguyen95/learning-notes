@@ -3,10 +3,10 @@
 
 ## How to use?
 - UML:
-<img src="./pics/composite.md" />
+<img src="./pics/composite.png" />
 
 - Example: Submenu in menu
-  <img src="./pics/composite-example.md" />
+  <img src="./pics/composite-example.png" />
   
   The Composite Pattern (MenuComponent interface) violates the Single Responsibility principle (since it contains operation of the composite and the leaf), the pattern trades that principle for transparency (client can treat both composites and leaf nodes uniformly).
   

@@ -1,10 +1,10 @@
 ## Introduction
 
-While you can provision your own EC2-based DNS service solutions, AWS provides Route53 as an alternative. Route53 is Amazon’s global DNS service. Its primary purpose is to translate human-readable domain names into IP addresses. Specifically, It's an authoritative name server system that:
-- provides us the ability to make direct updates to manage public DNS names.
-- answers DNS queries, i.e. translates domain names into IP addresses associated with our AWS constructs/infrastructure (EC2, ELB, CloudFront distribution, etc.).
+~~While you can provision your own EC2-based DNS service solutions, AWS provides Route53 as an alternative. Route53 is Amazon’s global DNS service. Its primary purpose is to translate human-readable domain names into IP addresses. Specifically, It's an authoritative name server system that:~~
+- ~~provides us the ability to make direct updates to manage public DNS names.~~
+- ~~answers DNS queries, i.e. translates domain names into IP addresses associated with our AWS constructs/infrastructure (EC2, ELB, CloudFront distribution, etc.).~~
 
-Route 53 is both a registrar and a DNS hosting provider. Route 53 is a domain registrar for hundreds of top level domains. If you have an existing domain name with another registrar, you can transfer it to Route 53.
+~~Route 53 is both a registrar and a DNS hosting provider. Route 53 is a domain registrar for hundreds of top level domains. If you have an existing domain name with another registrar, you can transfer it to Route 53.~~
 
 ## Route53 Aliases
 
@@ -30,7 +30,7 @@ CNAMEs and Route53 aliases:
 
 ## Hosted Zones & Zone Records
 
-A Hosted Zone is a container that holds information about how you want to route traffic for a domain and its subdomains., just like a zone file for a particular DNS zone on traditional DNS servers. Hosted Zone contains Zone Records which are equivalent to resource records in a zone file.
+A Hosted Zone is a container that holds information about how you want to route traffic for a domain and its subdomains, just like a zone file for a particular DNS zone on traditional DNS servers. Hosted Zone contains Zone Records which are equivalent to resource records in a zone file.
 
 2 types of Hosted Zones:
 - public zone: handle DNS requests made over the public internet.
@@ -173,3 +173,16 @@ Health checks tied to CloudWatch alarms.
 - This type of health checks will monitor the CloudWatch data stream that is being sent to a previously configured alarm.
 - Is considered healthy if alarm status is ok.
  
+### VPC Endpoints
+
+VPC endpoint is a way to access a public AWS service from within VPC without crossing the VPC boundary.
+
+2 types, choosing which one to use depends on which AWS service you want to access within your VPC:
+- Interface endpoints:
+    - Powered by AWS PrivateLink: a way to provide private connectivity between VPCs.
+    - AWS PrivateLink creates endpoints using ENIs with private IP addresses.
+    - These endpoints server as entry points for your VPC traffic.
+    - Many services are supported.
+- Gateway endpoints.
+    - Gateway endpoints are set up as logical constructs that we can specify as a target in our route table.
+    - S3 and DynamoDB are supported.

@@ -124,8 +124,8 @@ When data is written, both db and cache get updated.
 
 Notes:
 - Is a good combination with lazy-loading: lazy-loading caches cache misses on reads, write-through populates data on writes, so the two complement each other.
-- This strategy is suitable for use cases where the data get udpated and accessed frequently.
-- Under this strategy, reads will predonimately come to cache and writes go to db, this is good because many databases can do writes faster when writers aren't contending with readers for locks.
+- This strategy is suitable for use cases where the data get updated and accessed frequently.
+- Under this strategy, reads will predominately come to cache and writes will go to db, this is good because many databases can do writes faster when writers aren't contending with readers for locks.
 
 Advantages:
 - Cache is always up-to-date with db, no need TTL for cache data.

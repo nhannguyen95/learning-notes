@@ -2,7 +2,7 @@
 
 Whenever you create a VPC, you get your own private network on AWS, private means you can use the address ranges such as `10.0.0.0/8`, `172.16.0.0/12` to design a network that isn’t necessary connected to the public internet. In the VPC, you can create subnets, route tables, NACLs, and gateways to the internet or a VPN endpoint.
 
-You have a default VPC in each AWS Region. It comes with a public subnet in each AZ, an internet gateway, and settings to enable DNS resolution (e.g. if a region has 5 AZs, it will have 5 public subnets associated with each of those AZs). Every default VPC in every region in every single AWS account has `172.31.0.0/16` CIDR block range.
+You have a default VPC in each AWS Region. It comes with an internet gateway, and settings to enable DNS resolution (e.g. if a region has 5 AZs, it will have 5 public subnets associated with each of those AZs).
 
 VPC operates at Region level: it spans AZs in a single Region.
 
@@ -112,7 +112,7 @@ With ENI we can launch an EC2 instance into separate subnets (in the same AZ) by
 
 It is conceptually created and attached to the edge of the VPC and translates the public destination address of internet traffic coming to an instance to its private address and forwards the traffic to the VPC and vice versa. So it allows VPC resources to communicate with other public resources (AWS or public internet endpoints).
 
-An internet gateway is created in a specific region and can only be attached to 1 VPC.
+An internet gateway is created in a specific region and can only be attached to 1 VPC, 1 VPC also cannot have multiple internet gateways.
 
 Getting traffic to flow from VPC resources to the internet gateway is done via the VPC router, this traffic is governed by the route tables associated with subnets. In these route tables, we need to have an entry that takes internet traffic coming from VPC resources and forward them to the internet gateway (and vice versa):
 ```text
@@ -127,3 +127,108 @@ Elastic IP address is a static, public IPv4 address that you can allocate to you
 Elastic IP address can be associated to an ENI.
 
 By default you can have up to 5 total elastic IPs.
+
+## Security Groups
+
+Security group is a firewall at resource level that control incoming and outgoing traffic for each resource type, it is applied to ENIs or resources (EC2, RDS, ELB, etc.) they are associated with (with resource we mean the ENI attached to that resource).
+
+Every VPC you create will have a default security group associated with it. Anytime a resource is launched within the VPC without being specified a security group, the default security group will be applied to that resource.
+
+One security group can be applied to multiple ENIs, this allows us to apply a set of rules to multiple ENIs/resources.
+
+One ENI can also be associated with multiple security groups, the product of the rules are combined and applied to that resource.
+
+Security groups are stateful, this means return traffic is automatically allowed regardless of any rules.
+- For example, when you SSH to a VM firewalled by a security group, the sshd (SSH daemon) accepts the connection on port 22 but uses an ephemeral port for communication with the client, ephemeral ports are selected from 1024 to 65535. You only need to open inbound port 22 on the security group without the corresponding outbound rule on the ephemeral port. The outbound traffic is atomatically allowed even when there's no outbound rule specified in the security group(s) that firewall the VM.
+- Another example is the opposite direction, where the VM initiates an SSH request to some server, the return traffic on ephemeral port (inbound traffic to the VM) is automatically allowed even when there's no inbound rule specified in the security group(s) that firewall the VM.
+
+Security groups can specify allow rules, but not deny rules (they actually have a deny rule implicitly built in them).
+
+Security groups evaluate all rules, in any order, to decide whether to allow the traffic.
+
+Each rule allows the traffic based on the following:
+- Direction: inbound or outbound.
+- IP protocol: TCP, UDP, ICMP (for pinging).
+- Port.
+- Source/Destination based on IP address, IP address range or security group.
+
+By default, a security group does not allow any inbound traffic and contains a rule allowing all outbound traffic by default.
+
+## Network Access Control Lists (NACL)
+
+NACL is a firewall that operates at the subnet level that restrict traffic that goes from 1 subnet to another, traffic is processed before it enters or leaves the subnet, it is applied to any resource launched into a subnet. That’s an additional layer of security on top of security groups.
+
+Every VPC you create will come with a NACL, this NACL will be applied by default to any subnet you create within that VPC.
+
+One NACL can be applied to multiple subnets, but each subnet can only (and must) be associated to one NACL.
+
+NACLs are stateless (refer to [Security Group](#security-groups) for more details), this means you need to explicitly define inbound and corresponding outbound rule, especially rule for ephemeral ports for communications in a client server fashion. 
+
+NACLs can specify both allow and deny rules.
+
+Below is an example of a NACL's inbound rules:
+|Rule #|Type|Protocol|Port Range|Source|Allow/Deny|
+|-|-|-|-|-|-|
+|100|SSH|TCP|22|0.0.0.0/0|Allow|
+|200|HTTP|TCP|80|1.2.3.4/32|Deny|
+|300|Custom TCP|TCP|49152-65535|0.0.0.0/0|Allow|
+|*|All IPv4 traffic|All|All|0.0.0.0/0|Deny|
+- For list of outbound rules, we'll see Destination rather than Source.
+- NACLs evaluate rules in order (starting from low rule number) to decide whether to allow/deny traffic.
+- At the end of every single NACL, there's an implicit rule that can't be removed nor modified, it is for fallback matching. It always applies a Deny.
+
+## NAT gateway
+
+NAT gateway is an AWS managed service that allows us to create elastic NAT translations within our VPC: resources that have private IP addresses share a single public IP address to access the internet. It does so by changing the source IP address of packets to the NAT's public IP address, which is publicly routable, this allows packets to be sent out to their final destination. Private to public mapping records which allow for the same tranlation when traffic is returned and needs to be routed to the private address are kept in these NAT servers.
+
+When we create a NAT gateway, we need to provide the subnet to launch it in and an elastic IP address. From here we create the appropriate route table entries to route outbound internet traffic from private IP address to the NAT gateway.
+
+To increase availability, we can create another NAT gateway in another subnet in another AZ.
+
+NAT gateways are elastic, they wil grow and shrink as the traffic increases.
+
+NAT gateways scales up to 45 Gbps, if you need more you can just attach more NAT gateways into your subnet(s). By default you can have up to 5 NAT gateways per AZ.
+
+Pricing: the cost depends on the amount of data that is sent through the NAT gateway.
+
+We cannot associate SGs with a NAT gateway, but can associate SGs with resources behind it (such as subnets).
+
+## VPC Endpoint
+
+When an AWS resource in a private subnet need to access a (AWS) service outside of the VPC, we have to use one of the following solutions to allow the resource to communicate with the service:
+- use [NAT gateways](#nat-gateway).
+- use [internet gateways](#internet-gateway).
+- VPNs.
+
+This led to security concerns as NAT gateways, internet gateways, VPNs can be target for attacks.
+
+With VPC endpoints, resources in private subnet can access AWS services without exposing the traffic to the public internet, all traffic is internet and stay within the AWS network.
+
+2 types of interface endpoints:
+- Interface endpoint:
+    - Powered by AWS PrivateLink (which is a way to provide private connectivity between VPCs, AWS services and on premise applications on the AWS network).
+    - AWS PrivateLink creates endpoints using an ENI with a private ip address.
+    - These endpoints will be typical DNS endpoints and serve as entry points for your traffic.
+    - Support many services.
+- Gateway endpoint:
+    - Endpoints are setup as targets or logical constructs that we can specify as a target in our route table.
+    - Only supports S3 and DDB.
+
+Choosing which one to use depends on which service you want to access.
+
+Whenever we create a VPC endpoint, we need to specify:
+- the VPC we want to launch it in.
+- the service that we want to connect to using the endpoint.
+- a policy to help restrict access to resources via the endpoint (e.g. buckets within S3, tables within DDB; this policy is different from the service's policy, for example a endpoint can allow all access to an S3 bucket but the S3 bucket itself can deny the traffic.
+
+When the VPC endpoint is setup, we'll have a VPC endpoint ID (VPC EID) that we can add to the routing table that is associated with the subnet we want resources to have access to, the destination column will be a prefixed list ID which can be thought of as a logical object that presents a list of IP addresses for the region and service specific routes used by the services in the private subnet we are creating the endpoint for.
+
+![](./assets/vpc-endpoint.png)
+
+Key things:
+- Endpoints are a regional service: you can't access and endpoint in a region from another region.
+- Endpoints cannot be accessed from outside a VPC or from another VPC.
+- DNS resolution is needed within a VPC to access the endpoints in that VPC.
+- By default, VPC endpoints policy is unrestricted.
+- You can have multiple VPC endpoints within the same VPC, even for the same service. Each endpoint can have its own policy, and each can be applied to different subnets.
+

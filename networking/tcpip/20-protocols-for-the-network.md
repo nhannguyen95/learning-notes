@@ -62,7 +62,7 @@ Some record types:
 - `A`: maps a host to an IPv4 address.
 - `AAAA`: maps a host to an IPv6 address.
 - `CNAME`: Canonical Name records define an alias for a domain name.
-- `NS`: Name Server records, used by other root-level domain servers resolve domain names within the zone. The name servers defined in NS typically receive their data from the primary name server.
+- `NS`: Name Server records, used by other root-level domain servers to resolve domain names within the zone. The name servers defined in NS typically receive their data from the primary name server.
 - `MX`: Mail Exchange records are used to define mail servers.
 - `TXT`: Text records hold text information, just a way for us to put unformatted or arbitrary text in a record.
 - `PTR`: Pointer record is a reverse A record lookup. Maps an IP address to a host.

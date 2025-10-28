@@ -1,7 +1,5 @@
 ---
-
 mindmap-plugin: basic
-
 ---
 
 # Spring

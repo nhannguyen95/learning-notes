@@ -2,13 +2,13 @@
 
 JS has never had any direct notion of asynchronous built into it. 1 common thing of all JS hosting environments (browsers, servers, etc.) is that they have a mechanism in them that handles executing (invoking JS engine) multiple chunks/functions of a program over time, called the event loop.
 
-Event loop acts as a FIFO queue of events (program chunks/functions). For example, `setTimeout` does not put the callback on the event loop queue, instead it sets up a timer and when the timer expires, the hosting environment places the callback into the event loop. If there are already some items in the event loop at that moment, the callback will have to wait. That explaines why `setTimeout` might not fire with perfect temporal accuracy, but it's guaranteed (generally speaking) that the callback won't fire before the specified time interval, it can happen at or after that time, depending on the state of the event queue.
+Event loop acts as a FIFO queue of events (program chunks/functions). For example, `setTimeout` does not put the callback on the event loop queue, instead it sets up a timer and when the timer expires, the hosting environment places the callback into the event loop. If there are already some items in the event loop at that moment, the callback will have to wait. That explains why `setTimeout` might not fire with perfect temporal accuracy, but it's guaranteed (generally speaking) that the callback won't fire before the specified time interval, it can happen at or after that time, depending on the state of the event queue.
 
 The event loop breaks its work into tasks and executes them in serial, all of them share the same access to the program scope and state, so each modification to state is made on top of the previous one. Because of JS's single-threading (traditionally JS is single-threaded language), the code for each executed task is atomic (the entirety of its code will finish before any of the code in another task can run).
 
 Whenever there are tasks to run, the event loop runs until the queue is empty. Each iteration of the event loop is a tick. User interactions, IO and timers enqueue events on the event queue.
 
-Concurrency is when 2 or more chains of events/tasks interleave over time, such that from a high-level perspective they appear to be running simultaniously (even at any given moment only one event is being processed).
+Concurrency is when 2 or more chains of events/tasks interleave over time, such that from a high-level perspective they appear to be running simultaneously (even at any given moment only one event is being processed).
 
 If a task takes too long to run, it can block other tasks/chains of events such as UI updates, user events handling, etc. An example of such a task is:
 
@@ -38,12 +38,11 @@ function response(data) {
 }
 ```
 
-Not that `setTimeout(.., 0)` is not technically inserting a callback directly onto the event loop queue, but the timer will insert the callback at its next oppoturnity. This means 2 subsequent `setTimeout(.., 0)` calls would not be strictly guaranteed to be processed in call order.
+Not that `setTimeout(.., 0)` is not technically inserting a callback directly onto the event loop queue, but the timer will insert the callback at its next opportunity. This means 2 subsequent `setTimeout(.., 0)` calls would not be strictly guaranteed to be processed in call order.
 
 ## Job Queue
 
 As of ES6, there's a new concept layered on top of the event loop queue, called the Job queue.
-
 
 ## Promises
 
@@ -67,7 +66,7 @@ p.then(function () {
 
 If 2 promises `p1`, `p2` are already resolved, `p1.then(cb1); p2.then(cb2)` will end up calling `cb1` for `p1` before the ones for `p2`. But there are many subtle cases where that might not be true. Thus you should never rely on any thing about ordering/scheduling of callbacks across Promises.
 
-In case a promise never gets resolved, we are provided with a higher level abstraction called `race` to prevent it from haning our program indefinitely:
+In case a promise never gets resolved, we are provided with a higher level abstraction called `race` to prevent it from hanging our program indefinitely:
 ```js
 function timeoutPromise(delay) {
     return new Promise(function(resolve, reject) {
@@ -81,8 +80,8 @@ Promise.race([
     foo(),
     timeoutPromise(3000)
 ]).then(
-    function() {},     // foo is fulfilled in time.
-    function(erro) {}  // either foo is rejected, or didn't finish in time.
+    function() {},      // foo is fulfilled in time.
+    function(error) {}  // either foo is rejected, or didn't finish in time.
 )
 ```
 
@@ -92,7 +91,7 @@ if `resolve()` and `reject()` are called with multiple parameters, all subsequen
 
 If at any point in the creation of a Promise, a JS exception error occurs, that exception will be caught and it will force the Promise in question to become rejected.
 
-If the JS exception error occurs during the observation (in a `then` registered callback), the exception is listend in the promise that is returned by the `then(...)` call.
+If the JS exception error occurs during the observation (in a `then` registered callback), the exception is listened in the promise that is returned by the `then(...)` call.
 
 If you pass a genuine Promise to `Promise.resolve()`, you get the same promise back:
 ```js
@@ -116,7 +115,7 @@ var p2 = Promise.resolve(rejectedTh);   // p2 is a rejected promise.
 
 The key to making a Promise Chain Flow is built on some behaviors intrinsic to Promises:
 - Calling `then()` on a Promise creates and returns a new Promise which we can chain with.
-- Inside the fulfillment/rejection hanlders, if you return a value or an exception is thrown, the new returned (chainable) Promise is resolved accordingly.
+- Inside the fulfillment/rejection handles, if you return a value or an exception is thrown, the new returned (chain-able) Promise is resolved or rejected accordingly.
 - If the fulfillment or rejection handler returns a Promise, it is (recursively) unwrapped so that whatever its resolution is will become the resolution of the chained Promise returned from the current `then()`:
   ```js
   var p = Promise.resolve(21);
@@ -211,7 +210,7 @@ An `iterator` is an object that has the `next()` method on its interface.
 
 An `iterable` is an object that contains an `iterator` that can iterate over its values (by calling `next()`).
 
-As of ES6, the way to retrieve an `iterator` from an `iterable` is that the `iterable` must have a function on it , with the name being the special ES6 symbol value `Symbol.iterator`. When this function is called, it returns an `iterator`. Generally each call should return a fresh new `iterator` though not required.
+As of ES6, the way to retrieve an `iterator` from an `iterable` is that the `iterable` must have a function on it, with the name being the special ES6 symbol value `Symbol.iterator`. When this function is called, it returns an `iterator`. Generally each call should return a fresh new `iterator` though not required.
 
 An `iterable` can be looped through using `for..of` loop:
 ```js
@@ -410,7 +409,7 @@ Some common uses for Web Workers:
 - Data operations (compression, audio analysis, image pixel manipulations, etc.).
 - High-traffic network communications.
 
-A common thing of most of those uses is that they require a large amount of information to be transferred across the barrier between threads using the event machanism, perhaps in both direction. Some solutions:
+A common thing of most of those uses is that they require a large amount of information to be transferred across the barrier between threads using the event mechanism, perhaps in both direction. Some solutions:
 - Serializing all data to a string value.
 - Using the [structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm) to copy/duplicate the object on the other side (when you pass an object).
 - Using the [Transferable Objects](https://developer.chrome.com/blog/transferable-objects-lightning-fast/) option for large data sets, what happens is that the object's ownership is transferred, but the data itself is not moved.

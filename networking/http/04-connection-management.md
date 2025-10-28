@@ -7,16 +7,16 @@ TCP connections are reliable. Once a TCP connection is established, message exch
 The OSI (Open Systems Interconnection) model partitions a communication system into 7 abstraction layers:
 
 ```
-7. Application Layer    (Anyone)
+7. Application Layer    (to Anyone)
 6. Presentation Layer   (Password)
-5. Session Layer        (Secretly)
+5. Session Layer        (Secret)
 4. Transport Layer      (Tell)
 3. Network Layer        (Not)
 2. Data Link Layer      (Do)
 1. Physical Layer       (Please)
 ```
 
-The OSI model is then divided into two segments for more ease, Upper layers (5, 6, 7), and Data Flow layers (1, 2, 3, 4). The upper layers are directly related to the  user interface while the OSI model’s 4rth, 3rd, 2nd, and 1st layer are also called Data Flow Layers because they are related to the data flow. Each data flow layer has a Protocol Data Unit (PDU).
+The OSI model is then divided into two segments for more ease, Upper layers (5, 6, 7), and Data Flow layers (1, 2, 3, 4). The upper layers are directly related to the user interface while the OSI model’s 4rth, 3rd, 2nd, and 1st layer are also called Data Flow Layers because they are related to the data flow. Each data flow layer has a Protocol Data Unit (PDU).
 
 Each data flow layer’s Protocol Data Unit is defined as follows:
 - Transport Layer: **Segment** is the PDU of the Transport layer.
@@ -118,7 +118,7 @@ The Data Link layer receives the packets from the Network layer and places them 
 
 The Data Link layer encapsulates each packet in a frame and the MAC header carries the source Mac address and destination Mac address. If the device is on a different network, then the frame is sent to a router to be routed through an internetwork.
 
-**Data link layer: PDU = Bit**
+**Physical layer: PDU = Bit**
 
 To put this frame on the network, it must first be put into a digital signal. Since a frame is really a logical group of 1s and 0s, the OSI model’s Physical layer is responsible for encapsulating these digits into a digital signal, which devices on the same local network read.
 
@@ -283,7 +283,7 @@ Some disadvantages of parallel connections:
 
 For this reason, HTTP/1.1 allows HTTP devices to keep TCP connections open after transactions complete and to reuse them for future HTTP requests => these connections are called *persistent* connections.
 
-By reusing an idle persisnte connection (that is already open to the target server) => avoid slow connection setup.
+By reusing an idle persistent connection (that is already open to the target server) => avoid slow connection setup.
 
 Persistent connections have some advantages over parallel connections:
 - reduce the delay and overhead of connection establishment.

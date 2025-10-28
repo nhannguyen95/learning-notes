@@ -2,7 +2,7 @@
 
 `this` is neither a reference to a function itself, nor is it a reference to the function's lexical scope.
 
-`this` is actually a binding that is made when a fuction is invoked, and what it references is determined by the call-site where the function is called. The call-site is the second item from the top of the shown call stack if you set a break point at where the function gets called (the first item being the fuction call itself).
+`this` is actually a binding that is made when a function is invoked, and what it references is determined by the call-site where the function is called. The call-site is the second item from the top of the shown call stack if you set a break point at where the function gets called (the first item being the function call itself).
 
 ### Rules of call-site
 
@@ -91,7 +91,7 @@ var obj = { a: 2 };
 foo.call( obj );
 ```
 
-The problem with this is that whenever you invoke `foo` with obj `context`, you have to explicitly write `foo.call(obj)`.
+The problem with this is that whenever you invoke `foo` with `obj` context, you have to explicitly write `foo.call(obj)`.
 
 #### Hard binding
 
@@ -391,11 +391,11 @@ ES6 adds the `for..of` loop that will help iterate over the values of arrays/obj
 
 ## Class
 
-Even JS has had some class-like syntactic elements (such as `class` keyword in ES6), JS don't actually have classes. Since classes are a design patter, prior to ES6 we can implement approximations for much of classical class functionality.
+Even JS has had some class-like syntactic elements (such as `class` keyword in ES6), JS don't actually have classes. Since classes are a design pattern, prior to ES6 we can implement approximations for much of classical class functionality.
 
 ### ES6 Class
 
-Classes in traditional class-oriented languages produce a copy action from parent to child to instance, whereas in Prototype, the action is not copy, but rather a delegation link. Since the `class` keyword introduced in ES6 is mostly just syntactic surgar on top of the existing Prototype mechianism, the child class (or instance) is just linked to the parent class (or class) rather than a copy:
+Classes in traditional class-oriented languages produce a copy action from parent to child to instance, whereas in Prototype, the action is not copy, but rather a delegation link. Since the `class` keyword introduced in ES6 is mostly just syntactic sugar on top of the existing Prototype mechanism, the child class (or instance) is just linked to the parent class (or class) rather than a copy:
 
 ```js
 class C {
@@ -426,13 +426,13 @@ C.prototype.count = ;
 var c1 = new C();
 var c2 = new C();
 
-// Event worse, this would implicitly create a separate
+// Even worse, this would implicitly create a separate
 // shadowed `.count` property on both c1 and c2, rather
 // than updating the shared state.
 c1.count === c2.count;  // true
 ```
 
-`class` offers very little support for any of the pitfalls that this dynamicism can bring, as if it is telling you: "Dynamic is too hard, so it's probably not a good idea. Here'a a static-looking syntax, so code your stuff statically".
+`class` offers very little support for any of the pitfalls that this dynamism can bring, as if it is telling you: "Dynamic is too hard, so it's probably not a good idea. Here'a a static-looking syntax, so code your stuff statically".
 
 ## Prototypes
 
@@ -459,6 +459,6 @@ If you want to shadow `foo` in last 2 cases, you must use `Object.defineProperty
 
 Type introspection means to reason about the structure/capabilities of an object on how it was created. For example to check if object `a1` has the ability to call `something`:
 - We can check for the relationship between `a1` and an object/class that holds the delegatable `something` function (say Foo): `a1 instanceof Foo` or `Foo.prototype.isPrototypeOf(a1)` or `Foo.isPrototypOf(a1)`.
-- "Duck typeing": `if (a1.something) { a1.something() }`, this introduces risk. For example in ES6 Promises, there's a need to check if an object is a Promise, the way that test is done is to check if the object happends to have a `then()` function present on it. If you have any non-Promise object that happens to have a `then()` method on it for whatever reason you are strongly advised to keep it far away from ES6 Promise mechanism to avoid broken assumption.
+- "Duck typing": `if (a1.something) { a1.something() }`, this introduces risk. For example in ES6 Promises, there's a need to check if an object is a Promise, the way that test is done is to check if the object happens to have a `then()` function present on it. If you have any non-Promise object that happens to have a `then()` method on it for whatever reason you are strongly advised to keep it far away from ES6 Promise mechanism to avoid broken assumption.
   > Duck typing is the general term for type checks that make assumptions about a value's type based on its shape (what properties are present): "If it looks like a duck, and quacks like a duck, it must be a duck".
 

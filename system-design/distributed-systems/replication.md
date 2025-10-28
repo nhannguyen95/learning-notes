@@ -1,10 +1,6 @@
 ---
 
-  
-
 mindmap-plugin: basic
-
-  
 
 ---
 
@@ -131,20 +127,20 @@ mindmap-plugin: basic
 		- *Replication lag*: the delay between a write happening on leader and being reflected on follower
 		- Commonly surfaced in an eventually consistent system (async followers)
 		- Replication lag might cause bad UX, thus system might need to be designed to have stronger guarantee
-		- For leader-based replication, DBs typically expose replication lag metrics, so you can feed into monitoring system and investigate when the lag is large
-		- Problems with large replication lag
+		- For leader-based replication, DBs typically expose replication lag metrics, so you can feed into monitoring system and investigate when the lag is high
+		- Problems with high replication lag
 			- Problem 1
 				- When a user reads a data they just submitted (wrote), they might not see it
 				- Solution
 					- Need *read-your-writes consistency* (no guarantee about other users)
 						- When user shortly read something that they just modified, read from leader
 							- E.g. on social network system, always read user's own profile from leader, others from followers
-						- If most things in the application are editable by users, other criteria may be used to decide whether to read from the leader
+						- If most things in the application are editable by users, other criteria may be used to decide whether to read from the leader
 							- Tracking the last update, read from the leader within 1 minute after that
 							- Preventing queries on followers that is more than 1 minute behind the leader
 						- Ensure only replicas which reflected user's most recent write serve user' reads
 							- If it does not, reads can be handled by another replica or in can wait until replica has caught up
-						- If replicas are distributed across multiple datacenters, any request that needs to be served by the leader must be routed to the datacenter that contains the leader
+						- If replicas are distributed across multiple datacenters, any request that needs to be served by the leader must be routed to the datacenter that contains the leader
 					- When users access service from multiple devices
 						- Need to provide cross-device read-your-writes consistency
 							- User writes on one device, reads it on another one
@@ -236,7 +232,7 @@ mindmap-plugin: basic
 			- *Quorum reads/writes*: reads/writes that obey r and w values
 		- In Dynamo-style DBs; n, w, r are typically configurable
 			- w + r > n is not the only configuration
-			- You can do w + r <= n
+			- We can do w + r <= n
 				- Pros
 					- Lower latency and higher availability (can tolerate more node failures)
 				- Cons
@@ -252,7 +248,7 @@ mindmap-plugin: basic
 						- *Hinted handoff*: when unavailable nodes are fixed, writes are sent back from borrowed nodes
 						- Useful for increasing availability, but there might be stale values even w + r > n
 						- Sloppy quorum is optional in DynamoDB, enabled by default in Riak, disable by default in Cassandra, Voldemort
-			- This means w,r allow you to adjust the probability of stale values being read
+			- This means w,r allow you to adjust/tune the probability of stale values being read
 			- ==That's why Dynamo-style DBs are generally optimized for use cases that tolerate eventual consistency==
 			- Stronger guarantees generally require transactions or consensus
 	- Write conflicts
